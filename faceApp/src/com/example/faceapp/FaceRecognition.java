@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,25 +23,69 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class FaceRecognition extends Activity {
 	private Uri fileUri;
 	private ImageView imageView;
 	private Bitmap bitmap;
+	private ListView listView1;
 	private static final int IMAGE_SELECTOR = 1;
 	protected static final int CAMERA_REQUEST = 2;
 	protected static final int GALLERY_PICTURE = 3;
-
+	LinearLayout myGallery;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recog);
 
+		
+		final MatchedFace matchedFace_data[] = new MatchedFace[]
+			        {
+			            new MatchedFace(R.drawable.face1, "Cloudy"),
+			            new MatchedFace(R.drawable.face2, "Showers"),
+			            new MatchedFace(R.drawable.face3, "Snow"),
+			            new MatchedFace(R.drawable.face4, "Storm"),
+			            new MatchedFace(R.drawable.face5, "Sunny"),
+			            new MatchedFace(R.drawable.face6, "Lucky")
+			        };
+			
+		
+		MatchedFaceAdapter adapter = new MatchedFaceAdapter(this, 
+                R.layout.listview_item_row, matchedFace_data);
+        
+        
+        listView1 = (ListView)findViewById(R.id.listView1);
+         
+        View header = (View)getLayoutInflater().inflate(R.layout.listview_header_row, null);
+        listView1.addHeaderView(header);
+        
+        listView1.setAdapter(adapter);
+        listView1.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                    long id) {
+                
+            	String item = matchedFace_data[position-1].title.toString();
+                Toast.makeText(getBaseContext(), item, Toast.LENGTH_SHORT).show();
+                
+            }
+        });
+		
+		
+		
+		
+		
 		this.imageView = (ImageView) this.findViewById(R.id.imageView1);
 
 		// Detect Button
@@ -51,7 +97,16 @@ public class FaceRecognition extends Activity {
 				//Create a new image bitmap and attach a brand new canvas to it
 				
 				//TODO: check if the Bitmap exists
-				
+				if (bitmap==null){
+					Context context = getApplicationContext();
+					CharSequence text = "Please Add One Photo!";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();	 
+					
+					
+				}else{
 				
 				//TODO: write function for drawing
 				//TODO: face region and facial points
@@ -64,11 +119,44 @@ public class FaceRecognition extends Activity {
 			    canvas.drawCircle(60, 50, 25, paint);
 			    ImageView imageView = (ImageView)findViewById(R.id.imageView2);
 			  //Attach the canvas to the ImageView
-			    imageView.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));;			
+			    imageView.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));;
+				}
 				
 			}
 		});
 
+		
+		//Recognize Button
+		Button btnRecog = (Button) findViewById(R.id.button_recog);
+		btnRecog.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//TODO: Apply Face Detection
+				//Create a new image bitmap and attach a brand new canvas to it
+				
+				//TODO: check if the Bitmap exists
+				if (bitmap==null){
+					Context context = getApplicationContext();
+					CharSequence text = "Please Detect Face!";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();	 
+					
+					
+				}else{
+				
+				
+				}
+				
+			}
+		});
+
+				
+		
+		
+		
+		//Take photo button
 		Button btn = (Button) findViewById(R.id.button_take);
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -191,4 +279,57 @@ public class FaceRecognition extends Activity {
 
 		return mediaFile;
 	}
+	
+	 View insertPhoto(String path){
+	     Bitmap bm = decodeSampledBitmapFromUri(path, 220, 220);
+	     
+	     LinearLayout layout = new LinearLayout(getApplicationContext());
+	     layout.setLayoutParams(new LayoutParams(250, 250));
+	     layout.setGravity(Gravity.CENTER);
+	     
+	     ImageView imageView = new ImageView(getApplicationContext());
+	     imageView.setLayoutParams(new LayoutParams(220, 220));
+	     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+	     imageView.setImageBitmap(bm);
+	     
+	     layout.addView(imageView);
+	     return layout;
+	    }
+	 public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
+	     Bitmap bm = null;
+	     
+	     // First decode with inJustDecodeBounds=true to check dimensions
+	     final BitmapFactory.Options options = new BitmapFactory.Options();
+	     options.inJustDecodeBounds = true;
+	     BitmapFactory.decodeFile(path, options);
+	     
+	     // Calculate inSampleSize
+	     options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+	     
+	     // Decode bitmap with inSampleSize set
+	     options.inJustDecodeBounds = false;
+	     bm = BitmapFactory.decodeFile(path, options); 
+	     
+	     return bm;  
+	    }
+	    
+	    public int calculateInSampleSize(
+	      
+	     BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	     // Raw height and width of image
+	     final int height = options.outHeight;
+	     final int width = options.outWidth;
+	     int inSampleSize = 1;
+	        
+	     if (height > reqHeight || width > reqWidth) {
+	      if (width > height) {
+	       inSampleSize = Math.round((float)height / (float)reqHeight);   
+	      } else {
+	       inSampleSize = Math.round((float)width / (float)reqWidth);   
+	      }   
+	     }
+	     
+	     return inSampleSize;   
+	    }
+	    
 }

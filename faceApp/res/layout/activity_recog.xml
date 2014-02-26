@@ -8,24 +8,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:id="@+id/FrameView1" >
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="300px"
-            android:layout_height="400px"
+            android:layout_width="220dip"
+            android:layout_height="320dip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/blank_photo" />
+            android:src="@drawable/face6" />
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="300px"
-            android:layout_height="400px"
+            android:layout_width="220dip"
+            android:layout_height="320dip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             />
     </FrameLayout>
 
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="fill_parent"
+        android:layout_height="300dip"
+        android:layout_toRightOf="@+id/FrameView1"
+        />
+    
         <Button
             android:id="@+id/button_take"
             android:layout_width="wrap_content"
@@ -59,6 +67,7 @@
             android:background="@color/Button_Blue"
             android:gravity="left|center_vertical"
             android:text="  Detect Face"
-            android:textColor="@color/White" />
+            android:textColor="@color/White"
+             />
  
 </RelativeLayout>
