@@ -1,16 +1,27 @@
 package com.example.faceapp;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,6 +30,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -33,6 +45,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class FaceRecognition extends Activity {
@@ -40,15 +53,25 @@ public class FaceRecognition extends Activity {
 	private ImageView imageView;
 	private Bitmap bitmap;
 	private ListView listView1;
+	ProgressDialog dialog = null;
+	
+	/**********  File Path *************/
+    final String uploadFilePath = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
+    final String uploadFileName = "face1.png";
+    String upLoadServerUri = null;
+    
 	private static final int IMAGE_SELECTOR = 1;
 	protected static final int CAMERA_REQUEST = 2;
 	protected static final int GALLERY_PICTURE = 3;
+	int serverResponseCode = 0;
 	LinearLayout myGallery;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recog);
-
+		
+		 /************* Php script path ****************/
+        upLoadServerUri = "http://157.182.38.37/uploadTry.php";
 		
 		final MatchedFace matchedFace_data[] = new MatchedFace[]
 			        {
@@ -66,6 +89,7 @@ public class FaceRecognition extends Activity {
         
         
         listView1 = (ListView)findViewById(R.id.listView1);
+        listView1.setBackgroundResource(R.drawable.imageborder);
          
         View header = (View)getLayoutInflater().inflate(R.layout.listview_header_row, null);
         listView1.addHeaderView(header);
@@ -87,6 +111,7 @@ public class FaceRecognition extends Activity {
 		
 		
 		this.imageView = (ImageView) this.findViewById(R.id.imageView1);
+		imageView.setBackgroundResource(R.drawable.imageborder);
 
 		// Detect Button
 		Button btnDect = (Button) findViewById(R.id.button_dect);
@@ -145,11 +170,17 @@ public class FaceRecognition extends Activity {
 					
 					
 				}else{
-				
-				
+					dialog = ProgressDialog.show(FaceRecognition.this, "", "Uploading file...", true);
+					
+	                new Thread(new Runnable() {
+	                        public void run() {
+	                             //uploadFile(uploadFilePath + uploadFileName);
+	                        	
+	                             uploadFile(fileUri);
+	                        }
+	                      }).start();        
+	                }	
 				}
-				
-			}
 		});
 
 				
@@ -207,6 +238,7 @@ public class FaceRecognition extends Activity {
 							540, 800, true);
 
 					imageView.setImageBitmap(sizeBitmap);
+					
 				} catch (FileNotFoundException e) {
 
 					e.printStackTrace();
@@ -222,6 +254,7 @@ public class FaceRecognition extends Activity {
 					Bitmap sizeBitmap = Bitmap.createScaledBitmap(bitmap, 540,
 							800, true);
 					imageView.setImageBitmap(sizeBitmap);
+															
 				} catch (FileNotFoundException e) {
 
 					e.printStackTrace();
@@ -250,7 +283,7 @@ public class FaceRecognition extends Activity {
 		File mediaStorageDir = new File(
 				Environment
 						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-				"MyCameraApp");
+				"");
 		// This location works best if you want the created images to be shared
 		// between applications and persist after your app has been uninstalled.
 
@@ -331,5 +364,141 @@ public class FaceRecognition extends Activity {
 	     
 	     return inSampleSize;   
 	    }
+	    
+	  	  	   
+	    //Image loader
+	    public int uploadFile(Uri sourceFileUri) {
+	          
+	    	   	    		    	
+	    	 // Wrong: String fileName = sourceFileUri.getPath();
+	    	//Wrong: String fileName = sourceFileUri.toString().substring(7);
+	    	//Environment.getExternalStorageDirectory()
+	    	 String fileName = Environment.getExternalStorageDirectory().getPath()+ "/Pictures/"+sourceFileUri.toString().substring(sourceFileUri.toString().indexOf("IMG"));
+	    	  Log.i("filename", fileName);
+	    	  Log.i("uri_tostring", sourceFileUri.toString());
+	    	  
+	          HttpURLConnection conn = null;
+	          DataOutputStream dos = null;  
+	          String lineEnd = "\r\n";
+	          String twoHyphens = "--";
+	          String boundary = "*****";
+	          int bytesRead, bytesAvailable, bufferSize;
+	          byte[] buffer;
+	          int maxBufferSize = 1 * 1024 * 1024; 
+	          File sourceFile=new File(fileName);
+	          			  
+	          
+	          if (!sourceFile.isFile()) {
+	          	               
+	               dialog.dismiss(); 
+	                
+	               //Log.e("uploadFile", "Source File not exist :"
+	                                   //+uploadFilePath + "" + uploadFileName);
+	               Log.e("uploadFile","Source File not exist :" + fileName);
+	                  	               
+	                
+	               return 0;
+	            
+	          }
+	          else
+	          {
+	               try { 
+	                    
+	                     // open a URL connection to the Servlet
+	                   FileInputStream fileInputStream = new FileInputStream(sourceFile);
+	                   URL url = new URL(upLoadServerUri);
+	                    
+	                   // Open a HTTP  connection to  the URL
+	                   conn = (HttpURLConnection) url.openConnection(); 
+	                   conn.setDoInput(true); // Allow Inputs
+	                   conn.setDoOutput(true); // Allow Outputs
+	                   conn.setUseCaches(false); // Don't use a Cached Copy
+	                   conn.setRequestMethod("POST");
+	                   conn.setRequestProperty("Connection", "Keep-Alive");
+	                   conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+	                   conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+	                   conn.setRequestProperty("uploaded_file", fileName); 
+	                    
+	                   dos = new DataOutputStream(conn.getOutputStream());
+	          
+	                   dos.writeBytes(twoHyphens + boundary + lineEnd); 
+	                   dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""+ fileName + "\"" + lineEnd);
+	                    
+	                   dos.writeBytes(lineEnd);
+	          
+	                   // create a buffer of  maximum size
+	                   bytesAvailable = fileInputStream.available(); 
+	          
+	                   bufferSize = Math.min(bytesAvailable, maxBufferSize);
+	                   buffer = new byte[bufferSize];
+	          
+	                   // read file and write it into form...
+	                   bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
+	                      
+	                   while (bytesRead > 0) {
+	                        
+	                     dos.write(buffer, 0, bufferSize);
+	                     bytesAvailable = fileInputStream.available();
+	                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
+	                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
+	                      
+	                    }
+	          
+	                   // send multipart form data necesssary after file data...
+	                   dos.writeBytes(lineEnd);
+	                   dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+	          
+	                   // Responses from the server (code and message)
+	                   serverResponseCode = conn.getResponseCode();
+	                   String serverResponseMessage = conn.getResponseMessage();
+	                     
+	                   Log.i("uploadFile", "HTTP Response is : "
+	                           + serverResponseMessage + ": " + serverResponseCode);
+	                    
+	                   if(serverResponseCode == 200){
+	                        
+	                       runOnUiThread(new Runnable() {
+	                            public void run() {
+	                                 
+	                                                               
+	                                Toast.makeText(FaceRecognition.this, "File Upload Complete.", 
+	                                             Toast.LENGTH_SHORT).show();
+	                            }
+	                        });                
+	                   }    
+	                    
+	                   //close the streams //
+	                   fileInputStream.close();
+	                   dos.flush();
+	                   dos.close();
+	                     
+	              } catch (MalformedURLException ex) {
+	                   
+	                  dialog.dismiss();  
+	                  ex.printStackTrace();
+	                   
+	                 
+	                   
+	                  Log.e("Upload file to server", "error: " + ex.getMessage(), ex);  
+	              } catch (Exception e) {
+	                   
+	                  dialog.dismiss();  
+	                  e.printStackTrace();
+	                   
+	                  runOnUiThread(new Runnable() {
+	                      public void run() {
+	                         
+	                          Toast.makeText(FaceRecognition.this, "Got Exception : see logcat ", 
+	                                  Toast.LENGTH_SHORT).show();
+	                      }
+	                  });
+	                  Log.e("Upload file to server Exception", "Exception : "
+	                                                   + e.getMessage(), e);  
+	              }
+	              dialog.dismiss();       
+	              return serverResponseCode; 
+	               
+	           } // End else block 
+	         } 
 	    
 }

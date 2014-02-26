@@ -14,11 +14,11 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_width="60dip"
-        android:layout_height="60dip" />
+        android:layout_height="50dip" />
         
      <TextView android:id="@+id/txtTitle"
         android:layout_width="60dip"
-        android:layout_height="60dip"
+        android:layout_height="50dip"
         android:gravity="center_vertical"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"

@@ -177,6 +177,7 @@ public final class R {
         public static final int face5=0x7f020005;
         public static final int face6=0x7f020006;
         public static final int ic_launcher=0x7f020007;
+        public static final int imageborder=0x7f020008;
     }
     public static final class id {
         public static final int FrameView1=0x7f090007;

@@ -15,7 +15,7 @@
         android:textSize="10dp"
         android:textColor="#FFFFFF"
         android:padding="10dp"
-        android:text="Matched Photos"
-        android:background="#336699" />
+        android:text="Matched Faces (Top 6)"
+        android:background="@color/Button_Blue" />
 
 </LinearLayout>
