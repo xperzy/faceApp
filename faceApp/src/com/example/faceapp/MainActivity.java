@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		// Register Button
-		Button btnReg = (Button) findViewById(R.id.button1);
+		final Button btnReg = (Button) findViewById(R.id.button1);
 		btnReg.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -153,6 +153,8 @@ public final class R {
         public static final int WhiteSmoke=0x7f040028;
         public static final int Yellow=0x7f040005;
         public static final int YellowGreen=0x7f040052;
+        public static final int color=0x7f04008e;
+        public static final int colorlist=0x7f04008f;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 

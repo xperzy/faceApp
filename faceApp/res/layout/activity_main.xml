@@ -20,7 +20,7 @@
         android:text="    Recognize Face Photo"
         android:gravity="left|center_vertical"
         android:background="@color/Button_Blue"
-        android:textColor="@color/White" />
+        android:textColor="@color/colorlist" />
 
     <Button
         android:id="@+id/button3"
@@ -33,7 +33,7 @@
         android:text="    Estimate Age"
         android:gravity="left|center_vertical"
         android:background="@color/Button_Blue"
-        android:textColor="@color/White"
+        android:textColor="@color/colorlist"
         />
 
     <TextView
@@ -67,7 +67,7 @@
         android:background="@color/Button_Blue"
         android:gravity="left|center_vertical"
         android:text="    Exit"
-        android:textColor="@color/White" />
+        android:textColor="@color/colorlist" />
 
     <Button
         android:id="@+id/button1"
@@ -80,7 +80,7 @@
         android:background="@color/Button_Blue"
         android:gravity="left|center_vertical"
         android:text="    Register Face Photo"
-        android:textColor="@color/White" />
+        android:textColor="@color/colorlist" />
 
     <TextView
         android:id="@+id/textView1"

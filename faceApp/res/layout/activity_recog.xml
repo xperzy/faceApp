@@ -44,7 +44,7 @@
             android:background="@color/Button_Blue"
             android:gravity="left|center_vertical"
             android:text="  Take Photo"
-            android:textColor="@color/White" />
+            android:textColor="@color/colorlist" />
 
         <Button
             android:id="@+id/button_recog"
@@ -55,7 +55,7 @@
             android:background="@color/Button_Blue"
             android:gravity="left|center_vertical"
             android:text="  Recognize Face  "
-            android:textColor="@color/White" />
+            android:textColor="@color/colorlist" />
 
         <Button
             android:id="@+id/button_dect"
@@ -67,7 +67,7 @@
             android:background="@color/Button_Blue"
             android:gravity="left|center_vertical"
             android:text="  Detect Face"
-            android:textColor="@color/White"
+            android:textColor="@color/colorlist"
              />
  
 </RelativeLayout>
