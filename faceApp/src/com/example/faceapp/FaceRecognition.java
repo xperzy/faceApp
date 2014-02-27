@@ -15,6 +15,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.android.volley.toolbox.ImageLoader;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -59,6 +61,7 @@ public class FaceRecognition extends Activity {
     final String uploadFilePath = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
     final String uploadFileName = "face1.png";
     String upLoadServerUri = null;
+    String imageServerUri = null;
     
 	private static final int IMAGE_SELECTOR = 1;
 	protected static final int CAMERA_REQUEST = 2;
@@ -72,6 +75,7 @@ public class FaceRecognition extends Activity {
 		
 		 /************* Php script path ****************/
         upLoadServerUri = "http://157.182.38.37/uploadTry.php";
+        imageServerUri = "http://157.182.38.37/uploads/4.jpg";
 		
 		final MatchedFace matchedFace_data[] = new MatchedFace[]
 			        {
@@ -132,10 +136,18 @@ public class FaceRecognition extends Activity {
 					
 					
 				}else{
-				
+				//Get a detected photo from server
+					ImageLoader imageLoader = MyVolley.getImageLoader();
+					imageLoader.get(imageServerUri, 
+                            ImageLoader.getImageListener(imageView, 
+                                                          R.drawable.no_image, 
+                                                          R.drawable.error_image));
+					
+					
+					
 				//TODO: write function for drawing
 				//TODO: face region and facial points
-				Paint paint = new Paint();
+				/*Paint paint = new Paint();
 				paint.setColor(Color.GREEN);
 				
 				Bitmap tempBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
@@ -144,7 +156,7 @@ public class FaceRecognition extends Activity {
 			    canvas.drawCircle(60, 50, 25, paint);
 			    ImageView imageView = (ImageView)findViewById(R.id.imageView2);
 			  //Attach the canvas to the ImageView
-			    imageView.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));;
+			    imageView.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));;*/
 				}
 				
 			}
