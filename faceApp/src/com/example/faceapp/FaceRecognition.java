@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -57,6 +58,7 @@ public class FaceRecognition extends Activity {
 	private ListView listView1;
 	ProgressDialog dialog = null;
 	
+	
 	/**********  File Path *************/
     final String uploadFilePath = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
     final String uploadFileName = "face1.png";
@@ -75,8 +77,9 @@ public class FaceRecognition extends Activity {
 		
 		 /************* Php script path ****************/
         upLoadServerUri = "http://157.182.38.37/uploadTry.php";
-        imageServerUri = "http://157.182.38.37/uploads/4.jpg";
-		
+        imageServerUri = "http://157.182.38.37/uploads/4.jpg";   
+            
+              
 		final MatchedFace matchedFace_data[] = new MatchedFace[]
 			        {
 			            new MatchedFace(R.drawable.face1, "Cloudy"),
@@ -90,8 +93,8 @@ public class FaceRecognition extends Activity {
 		
 		MatchedFaceAdapter adapter = new MatchedFaceAdapter(this, 
                 R.layout.listview_item_row, matchedFace_data);
-        
-        
+		
+		        
         listView1 = (ListView)findViewById(R.id.listView1);
         listView1.setBackgroundResource(R.drawable.imageborder);
          
@@ -137,6 +140,8 @@ public class FaceRecognition extends Activity {
 					
 				}else{
 				//Get a detected photo from server
+					//TODO: set specific URI
+					//MyVolley.init(FaceRecognition.this);
 					ImageLoader imageLoader = MyVolley.getImageLoader();
 					imageLoader.get(imageServerUri, 
                             ImageLoader.getImageListener(imageView, 

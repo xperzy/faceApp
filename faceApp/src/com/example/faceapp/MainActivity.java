@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		MyVolley.init(MainActivity.this);
 		// Register Button
 		final Button btnReg = (Button) findViewById(R.id.button1);
 		btnReg.setOnClickListener(new OnClickListener() {
