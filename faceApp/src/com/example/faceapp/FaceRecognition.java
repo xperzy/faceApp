@@ -2,10 +2,13 @@ package com.example.faceapp;
 
 import java.io.DataInputStream;
 import android.content.DialogInterface;
+
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -16,6 +19,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +40,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -46,6 +51,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -66,7 +73,7 @@ public class FaceRecognition extends Activity {
 	private ImageView imageView;
 	private Bitmap bitmap;
 	private ListView listView1;
-	boolean upload_success= false;
+	boolean upload_success = false;
 	ProgressDialog dialog = null;
 
 	/********** Show Image List parameters *************/
@@ -140,9 +147,7 @@ public class FaceRecognition extends Activity {
 		mLvPicasa.setBackgroundResource(R.drawable.imageborder);
 		View header = (View) getLayoutInflater().inflate(
 				R.layout.listview_header_row, null);
-		
-				
-		
+
 		mLvPicasa.addHeaderView(header);
 		mAdapter = new MatchedFaceAdapter2(this,
 				R.layout.listview_item_row_volley, mEntries,
@@ -182,29 +187,38 @@ public class FaceRecognition extends Activity {
 
 					dialog = ProgressDialog.show(FaceRecognition.this, "",
 							"Uploading file...", true);
+
 					
-					
-					upload_success= false;
-					
+					final CountDownLatch latch = new CountDownLatch(1); //wait for the thread finished				
 					new Thread(new Runnable() {
 						public void run() {
-							uploadFile(fileUri); // used for upload face image
+							// uploadFile(fileUri); // used for upload face
+							// image
+							uploadFile(fileUri.toString().substring(
+									fileUri.toString().indexOf("IMG")));
+							latch.countDown();
 						}
 					}).start();
-
+					
+							
+					try {
+						latch.await();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					Log.i("upload_success: ",upload_success==true?"True":"False");
 					// Get a detected photo from server
 					// MyVolley.init(FaceRecognition.this);
-					if (upload_success){
-					ImageLoader imageLoader = MyVolley.getImageLoader();
-					imageLoader.get(imageServerUri_getD+"?link="+fileUri.toString(), ImageLoader
-							.getImageListener(imageView, R.drawable.no_image,
-									R.drawable.error_image));
-					}else{
-						//do nothing
-						
-						
-					}
-
+					Log.i("get detect","Getting Detected face");
+						ImageLoader imageLoader = MyVolley.getImageLoader();
+						imageLoader.get(imageServerUri_getD + "?link="
+								+ fileUri.toString(), ImageLoader
+								.getImageListener(imageView,
+										R.drawable.no_image,
+										R.drawable.error_image));
+					
 					// TODO: write function for drawing
 					// TODO: face region and facial points
 					/*
@@ -259,6 +273,10 @@ public class FaceRecognition extends Activity {
 				Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT,
 						null);
 				galleryintent.setType("image/*");
+
+				// This can work as well
+				// Intent galleryintent = new Intent(Intent.ACTION_PICK,
+				// android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
 				Intent cameraIntent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -432,7 +450,151 @@ public class FaceRecognition extends Activity {
 		return inSampleSize;
 	}
 
-	// Image loader
+	// upload image to server (use cache to create a File from bitmap and
+	// upload)
+	public int uploadFile(String fileName) {
+
+		HttpURLConnection conn = null;
+		DataOutputStream dos = null;
+		String lineEnd = "\r\n";
+		String twoHyphens = "--";
+		String boundary = "*****";
+		int bytesRead, bytesAvailable, bufferSize;
+		byte[] buffer;
+		int maxBufferSize = 1 * 1024 * 1024;
+		File sourceFile = new File(this.getCacheDir(), fileName);
+		try {
+			sourceFile.createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		if (bitmap == null) {
+
+			dialog.dismiss();
+			Log.e("uploadFile", "Source File not exist");
+			return 0;
+
+		} else {
+			try {
+				// Convert bitmap to byte array
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				bitmap.compress(CompressFormat.PNG, 0, bos);
+				byte[] bitmapdata = bos.toByteArray();
+
+				// write the bytes in file
+				FileOutputStream fos = new FileOutputStream(sourceFile);
+				fos.write(bitmapdata);
+
+				// open a URL connection to the Servlet
+				FileInputStream fileInputStream = new FileInputStream(
+						sourceFile);
+				URL url = new URL(upLoadServerUri);
+
+				// Open a HTTP connection to the URL
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setDoInput(true); // Allow Inputs
+				conn.setDoOutput(true); // Allow Outputs
+				conn.setUseCaches(false); // Don't use a Cached Copy
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Connection", "Keep-Alive");
+				conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+				conn.setRequestProperty("Content-Type",
+						"multipart/form-data;boundary=" + boundary);
+				conn.setRequestProperty("uploaded_file", fileName);
+
+				dos = new DataOutputStream(conn.getOutputStream());
+
+				dos.writeBytes(twoHyphens + boundary + lineEnd);
+				dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+						+ fileName + "\"" + lineEnd);
+
+				dos.writeBytes(lineEnd);
+
+				// create a buffer of maximum size
+				bytesAvailable = fileInputStream.available();
+
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				buffer = new byte[bufferSize];
+
+				// read file and write it into form...
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+				while (bytesRead > 0) {
+
+					dos.write(buffer, 0, bufferSize);
+					bytesAvailable = fileInputStream.available();
+					bufferSize = Math.min(bytesAvailable, maxBufferSize);
+					bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+				}
+
+				// send multipart form data necesssary after file data...
+				dos.writeBytes(lineEnd);
+				dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+				// Responses from the server (code and message)
+				serverResponseCode = conn.getResponseCode();
+				String serverResponseMessage = conn.getResponseMessage();
+
+				Log.i("uploadFile", "HTTP Response is : "
+						+ serverResponseMessage + ": " + serverResponseCode);
+
+				if (serverResponseCode == 200) {
+
+					runOnUiThread(new Runnable() {
+						public void run() {
+
+							Toast.makeText(FaceRecognition.this,
+									"File Upload Complete.", Toast.LENGTH_SHORT)
+									.show();
+						}
+					});
+
+				}
+
+				// close the streams //
+				fileInputStream.close();
+				dos.flush();
+				dos.close();
+
+				// close the streams //
+				bos.flush();
+				bos.close();
+				fos.flush();
+				fos.close();
+
+			} catch (MalformedURLException ex) {
+
+				dialog.dismiss();
+				ex.printStackTrace();
+
+				Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+			} catch (Exception e) {
+
+				dialog.dismiss();
+				e.printStackTrace();
+
+				runOnUiThread(new Runnable() {
+					public void run() {
+
+						Toast.makeText(FaceRecognition.this,
+								"Got Exception : see logcat ",
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+				Log.e("Upload file to server Exception",
+						"Exception : " + e.getMessage(), e);
+			}
+			dialog.dismiss();
+			return serverResponseCode;
+
+		} // End else block
+	}
+
+	// (No longer Used) uoload image to server using file uri, cannot work from
+	// gallery selected file
 	public int uploadFile(Uri sourceFileUri) {
 
 		// Wrong: String fileName = sourceFileUri.getPath();
@@ -532,8 +694,8 @@ public class FaceRecognition extends Activity {
 									.show();
 						}
 					});
-					
-					upload_success= true;
+
+					upload_success = true;
 				}
 
 				// close the streams //
