@@ -38,6 +38,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -56,8 +57,10 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -71,6 +74,8 @@ import android.widget.Toast;
 public class FaceRecognition extends Activity {
 	private Uri fileUri;
 	private ImageView imageView;
+	private ImageView imageView2;
+	private ImageView imageView3;
 	private Bitmap bitmap;
 	private ListView listView1;
 	boolean upload_success = false;
@@ -80,6 +85,8 @@ public class FaceRecognition extends Activity {
 	private static final int RESULTS_PAGE_SIZE = 10;
 	String imageServerUri_load = "http://157.182.38.37/welcome.php";
 	String imageServerUri_getD = "http://157.182.38.37/getDetected.php";
+	String imageServerUri_getCrop = "http://157.182.38.37/getCrop.php";
+	String imageServerUri_getMesh = "http://157.182.38.37/getMesh.php";
 	private ListView mLvPicasa;
 	private boolean mHasData = false;
 	private boolean mInError = false;
@@ -140,6 +147,32 @@ public class FaceRecognition extends Activity {
 
 		this.imageView = (ImageView) this.findViewById(R.id.imageView1);
 		imageView.setBackgroundResource(R.drawable.imageborder);
+		imageView.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				loadPhoto(imageView, v.getWidth(), v.getHeight());
+			}
+		});
+		this.imageView2 = (ImageView) this.findViewById(R.id.imageView2);
+		imageView2.setBackgroundResource(R.drawable.imageborder);
+		imageView2.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				loadPhoto(imageView2, v.getWidth(), v.getHeight());
+			}
+		});
+		
+		this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
+		imageView3.setBackgroundResource(R.drawable.imageborder);
+		imageView3.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				loadPhoto(imageView3, v.getWidth(), v.getHeight());
+			}
+		});
+		
+		//this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
+		//imageView3.setBackgroundResource(R.drawable.imageborder);
 
 		// Image List View
 
@@ -162,7 +195,10 @@ public class FaceRecognition extends Activity {
 				String item = mf.getTitle();
 				Toast.makeText(getBaseContext(), item, Toast.LENGTH_SHORT)
 						.show();
-
+				Intent intent = new Intent(FaceRecognition.this,FaceDetail.class);
+				intent.putExtra("face_title",mf.getTitle());
+				intent.putExtra("face_uri",mf.getThumbnailUrl());
+				startActivity(intent);
 			}
 		});
 
@@ -208,17 +244,36 @@ public class FaceRecognition extends Activity {
 						e.printStackTrace();
 					}
 					
-					Log.i("upload_success: ",upload_success==true?"True":"False");
 					// Get a detected photo from server
 					// MyVolley.init(FaceRecognition.this);
-					Log.i("get detect","Getting Detected face");
+					
 						ImageLoader imageLoader = MyVolley.getImageLoader();
+						//Draw big detected Face image
 						imageLoader.get(imageServerUri_getD + "?link="
 								+ fileUri.toString(), ImageLoader
 								.getImageListener(imageView,
 										R.drawable.no_image,
 										R.drawable.error_image));
-					
+						//Draw cropped Face image
+						imageLoader.get(imageServerUri_getCrop + "?link="
+								+ fileUri.toString(), ImageLoader
+								.getImageListener(imageView2,
+										R.drawable.no_image,
+										R.drawable.error_image));
+						//Draw meshed Face image
+						imageLoader.get(imageServerUri_getCrop + "?link="
+								+ fileUri.toString(), ImageLoader
+								.getImageListener(imageView3,
+										R.drawable.no_image,
+										R.drawable.error_image));
+						
+						
+						
+						
+					//Toast.makeText(getApplicationContext(), "Detected Face Image Retrieved", Toast.LENGTH_SHORT).show();
+											
+						
+						
 					// TODO: write function for drawing
 					// TODO: face region and facial points
 					/*
@@ -549,6 +604,7 @@ public class FaceRecognition extends Activity {
 							Toast.makeText(FaceRecognition.this,
 									"File Upload Complete.", Toast.LENGTH_SHORT)
 									.show();
+							
 						}
 					});
 
@@ -806,5 +862,33 @@ public class FaceRecognition extends Activity {
 		b.setMessage("Error occured");
 		b.show();
 	}
+	
+	
+	//load photo when click the small face image view(big, crop and meshed)
+	private void loadPhoto(ImageView imageView, int width, int height) {
+
+        ImageView tempImageView = imageView;
+
+
+        AlertDialog.Builder imageDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View layout = inflater.inflate(R.layout.custom_fullimage_dialog,
+                (ViewGroup) findViewById(R.id.layout_root));
+        ImageView image = (ImageView) layout.findViewById(R.id.fullimage);
+        image.setImageDrawable(tempImageView.getDrawable());
+        imageDialog.setView(layout);
+        imageDialog.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+
+        });
+
+
+        imageDialog.create();
+        imageDialog.show();     
+    }
 
 }

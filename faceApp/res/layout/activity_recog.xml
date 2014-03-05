@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent" >
 
     <FrameLayout
+        android:id="@+id/FrameView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:id="@+id/FrameView1" >
+        android:layout_alignParentTop="true" >
 
         <ImageView
             android:id="@+id/imageView1"
@@ -20,49 +19,80 @@
             android:src="@drawable/no_image" />
     </FrameLayout>
 
-    
-    
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
         android:layout_height="320dip"
-        android:layout_toRightOf="@+id/FrameView1"
-    />
-    
-        <Button
-            android:id="@+id/button_take"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/button_recog"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/button_recog"
-            android:background="@color/Button_Blue"
-            android:gravity="left|center_vertical"
-            android:text="  Take Photo"
-            android:textColor="@color/colorlist" />
+        android:layout_toRightOf="@+id/FrameView1" />
 
-        <Button
-            android:id="@+id/button_recog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/button_take"
-            android:layout_alignParentRight="true"
-            android:background="@color/Button_Blue"
-            android:gravity="left|center_vertical"
-            android:text="  Recognize Face  "
-            android:textColor="@color/colorlist" />
+    <Button
+        android:id="@+id/button_take"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_recog"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/button_recog"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="  Take Photo"
+        android:textColor="@color/colorlist"
+        android:textSize="12dp" />
 
-        <Button
-            android:id="@+id/button_dect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/button_recog"
-            android:layout_alignLeft="@+id/button_recog"
-            android:layout_alignParentRight="true"
-            android:background="@color/Button_Blue"
-            android:gravity="left|center_vertical"
-            android:text="  Detect Face"
-            android:textColor="@color/colorlist"
-             />
- 
+    <Button
+        android:id="@+id/button_recog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_take"
+        android:layout_alignLeft="@+id/button_dect"
+        android:layout_alignParentRight="true"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="  Recognize Face  "
+        android:textColor="@color/colorlist"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/button_dect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_recog"
+        android:layout_alignParentRight="true"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="  Detect Face"
+        android:textColor="@color/colorlist"
+        android:textSize="12dp" />
+
+    <FrameLayout
+        android:id="@+id/FrameView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/FrameView1" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="110dip"
+            android:layout_height="110dip"
+            android:src="@drawable/no_image" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="110dip"
+        android:layout_height="110dip"
+        android:layout_below="@+id/FrameView1"
+        android:layout_toLeftOf="@+id/listView1"
+        android:src="@drawable/no_image" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button_recog"
+        android:layout_alignBottom="@+id/button_recog"
+        android:layout_alignParentLeft="true"
+        android:text="Top 10 Matched Persons" />
+
 </RelativeLayout>
