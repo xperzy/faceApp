@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="16dp"
         android:text="Version 0.1"
         android:textColor="@color/White" />
 
@@ -86,12 +86,22 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/button1"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="77dp"
         android:text="Face Recognition Demo"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/White" />
+        android:textColor="@color/White"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="West Virginia University"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+        android:textColor="@color/AliceBlue" />
 
 </RelativeLayout>

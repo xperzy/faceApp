@@ -30,6 +30,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageContainer;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import android.app.Activity;
@@ -80,6 +82,7 @@ public class FaceRecognition extends Activity {
 	private ListView listView1;
 	boolean upload_success = false;
 	ProgressDialog dialog = null;
+	
 
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
@@ -144,7 +147,7 @@ public class FaceRecognition extends Activity {
 		 * 
 		 * } });
 		 */
-
+		
 		this.imageView = (ImageView) this.findViewById(R.id.imageView1);
 		imageView.setBackgroundResource(R.drawable.imageborder);
 		imageView.setOnClickListener(new OnClickListener(){
@@ -177,6 +180,7 @@ public class FaceRecognition extends Activity {
 		// Image List View
 
 		mLvPicasa = (ListView) findViewById(R.id.listView1);
+		//mLvPicasa.setBackgroundColor(getResources().getColor(R.color.Background_Gray));
 		mLvPicasa.setBackgroundResource(R.drawable.imageborder);
 		View header = (View) getLayoutInflater().inflate(
 				R.layout.listview_header_row, null);
@@ -202,6 +206,8 @@ public class FaceRecognition extends Activity {
 			}
 		});
 
+		
+		
 		// Detect Button
 		Button btnDect = (Button) findViewById(R.id.button_dect);
 		btnDect.setOnClickListener(new OnClickListener() {
@@ -249,23 +255,48 @@ public class FaceRecognition extends Activity {
 					
 						ImageLoader imageLoader = MyVolley.getImageLoader();
 						//Draw big detected Face image
-						imageLoader.get(imageServerUri_getD + "?link="
+						/*imageLoader.get(imageServerUri_getD + "?link="
 								+ fileUri.toString(), ImageLoader
 								.getImageListener(imageView,
 										R.drawable.no_image,
-										R.drawable.error_image));
+										R.drawable.error_image));*/
+						
+						imageLoader.get(imageServerUri_getD + "?link="
+						+ fileUri.toString(), new ImageListener(){
+							@Override
+				            public void onErrorResponse(VolleyError error) {
+				                //if (errorImageResId != 0) {
+				                //    imageView.setImageResource(errorImageResId);
+				                //}
+								Toast.makeText(FaceRecognition.this, "No Face Detected!!!", Toast.LENGTH_LONG).show();
+				            }
+
+				            @Override
+				            public void onResponse(ImageContainer response, boolean isImmediate) {
+				                if (response.getBitmap() != null) {
+				                    imageView.setImageBitmap(response.getBitmap());
+				                } else if (R.drawable.blank_photo != 0) {
+				                    imageView.setImageResource(R.drawable.blank_photo);
+				                }
+				            }
+						}
+						);
+						
+						
+						
+						
 						//Draw cropped Face image
 						imageLoader.get(imageServerUri_getCrop + "?link="
 								+ fileUri.toString(), ImageLoader
 								.getImageListener(imageView2,
 										R.drawable.no_image,
-										R.drawable.error_image));
+										R.drawable.blank_photo));
 						//Draw meshed Face image
 						imageLoader.get(imageServerUri_getCrop + "?link="
 								+ fileUri.toString(), ImageLoader
 								.getImageListener(imageView3,
 										R.drawable.no_image,
-										R.drawable.error_image));
+										R.drawable.blank_photo));
 						
 						
 						
