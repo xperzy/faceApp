@@ -57,6 +57,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -78,6 +79,7 @@ public class FaceRecognition extends Activity {
 	private ImageView imageView;
 	private ImageView imageView2;
 	private ImageView imageView3;
+	private TextView textView_Res;
 	private Bitmap bitmap;
 	private ListView listView1;
 	boolean upload_success = false;
@@ -86,10 +88,14 @@ public class FaceRecognition extends Activity {
 
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
-	String imageServerUri_load = "http://157.182.38.37/welcome.php";
-	String imageServerUri_getD = "http://157.182.38.37/getDetected.php";
-	String imageServerUri_getCrop = "http://157.182.38.37/getCrop.php";
-	String imageServerUri_getMesh = "http://157.182.38.37/getMesh.php";
+	//private static final String SERVER_IP_ADDRESS = "http://157.182.38.37/";
+	private static final String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
+	String imageServerUri_load = SERVER_IP_ADDRESS+"welcome.php";  //"http://157.182.38.37/welcome.php";
+	String imageServerUri_getD = SERVER_IP_ADDRESS+"getDetected.php"; //"http://157.182.38.37/getDetected.php";
+	String imageServerUri_getCrop = SERVER_IP_ADDRESS+"getCrop.php";//"http://157.182.38.37/getCrop.php";
+	String imageServerUri_getMesh = SERVER_IP_ADDRESS+"getMesh.php";//"http://157.182.38.37/getMesh.php";
+	String imageServerUri_getPoints = SERVER_IP_ADDRESS+"getPoints.php";
+	
 	private ListView mLvPicasa;
 	private boolean mHasData = false;
 	private boolean mInError = false;
@@ -115,8 +121,8 @@ public class FaceRecognition extends Activity {
 		setContentView(R.layout.activity_recog);
 
 		/************* Php script path ****************/
-		upLoadServerUri = "http://157.182.38.37/uploadTry.php";
-		imageServerUri = "http://157.182.38.37/uploads/4.jpg";
+		upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
+		//imageServerUri = "http://157.182.38.37/uploads/4.jpg";
 
 		/*
 		 * final MatchedFace matchedFace_data[] = new MatchedFace[] { new
@@ -173,6 +179,9 @@ public class FaceRecognition extends Activity {
 				loadPhoto(imageView3, v.getWidth(), v.getHeight());
 			}
 		});
+		
+		textView_Res = (TextView) findViewById(R.id.textView_Res);
+		textView_Res.setMovementMethod(new ScrollingMovementMethod());
 		
 		//this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
 		//imageView3.setBackgroundResource(R.drawable.imageborder);
@@ -250,6 +259,24 @@ public class FaceRecognition extends Activity {
 						e.printStackTrace();
 					}
 					
+					
+					
+					//Get Detected Points
+					RequestQueue queue = MyVolley.getRequestQueue();
+	                
+	                JsonObjectRequest myReq = new JsonObjectRequest(Method.GET, 
+	                		imageServerUri_getPoints+"?name="+fileUri.toString().substring(
+									fileUri.toString().indexOf("IMG")),
+	                                                        null,
+	                                                        createMyReqSuccessListener2(),
+	                                                        createMyReqErrorListener2());
+
+	                queue.add(myReq);
+					
+					
+					
+					
+					
 					// Get a detected photo from server
 					// MyVolley.init(FaceRecognition.this);
 					
@@ -261,7 +288,7 @@ public class FaceRecognition extends Activity {
 										R.drawable.no_image,
 										R.drawable.error_image));*/
 						
-						imageLoader.get(imageServerUri_getD + "?link="
+						imageLoader.get(imageServerUri_getD + "?name="
 						+ fileUri.toString(), new ImageListener(){
 							@Override
 				            public void onErrorResponse(VolleyError error) {
@@ -286,19 +313,20 @@ public class FaceRecognition extends Activity {
 						
 						
 						//Draw cropped Face image
-						imageLoader.get(imageServerUri_getCrop + "?link="
+						imageLoader.get(imageServerUri_getCrop + "?name="
 								+ fileUri.toString(), ImageLoader
 								.getImageListener(imageView2,
 										R.drawable.no_image,
 										R.drawable.blank_photo));
 						//Draw meshed Face image
-						imageLoader.get(imageServerUri_getCrop + "?link="
+						imageLoader.get(imageServerUri_getCrop + "?name="
 								+ fileUri.toString(), ImageLoader
 								.getImageListener(imageView3,
 										R.drawable.no_image,
 										R.drawable.blank_photo));
 						
 						
+					
 						
 						
 					//Toast.makeText(getApplicationContext(), "Detected Face Image Retrieved", Toast.LENGTH_SHORT).show();
@@ -922,4 +950,29 @@ public class FaceRecognition extends Activity {
         imageDialog.show();     
     }
 
+	
+	
+	private Response.Listener<JSONObject> createMyReqSuccessListener2() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    textView_Res.setText(response.getString("size")+response.getString("points"));
+                } catch (JSONException e) {
+                    textView_Res.setText("Parse error");
+                }
+            }
+        };
+    }
+    
+    
+    private Response.ErrorListener createMyReqErrorListener2() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                textView_Res.setText(error.getMessage());
+                Log.i("json error",error.getMessage());
+            }
+        };
+    }
 }

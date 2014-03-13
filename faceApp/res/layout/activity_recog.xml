@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Background_Gray" >
+    android:background="@drawable/blue_glow" >
 
     <FrameLayout
         android:id="@+id/FrameView1"
@@ -17,7 +17,7 @@
             android:layout_height="320dip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/blank_photo"
+            android:src="@drawable/blue_grid"
             android:scaleType="fitXY" />
     </FrameLayout>
 
@@ -101,5 +101,15 @@
         android:layout_alignParentLeft="true"
         android:textColor="@color/White"
         android:text="Top 10 Matched Persons" />
+
+    <TextView
+        android:id="@+id/textView_Res"
+        android:layout_width="120dip"
+        android:layout_height="50dip"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/White"
+        android:scrollbars="vertical"
+        android:layout_alignTop="@+id/button_take"
+        android:text="" />
 
 </RelativeLayout>
