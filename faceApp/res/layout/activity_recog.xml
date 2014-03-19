@@ -19,8 +19,10 @@
             android:layout_alignParentTop="true"
             android:src="@drawable/blue_grid"
             android:scaleType="fitXY" />
-    </FrameLayout>
 
+      
+    </FrameLayout>
+    
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
@@ -58,7 +60,7 @@
     </FrameLayout>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView_3"
         android:layout_width="110dip"
         android:layout_height="110dip"
         android:layout_below="@+id/FrameView1"
@@ -111,5 +113,26 @@
         android:scrollbars="vertical"
         android:layout_alignTop="@+id/button_take"
         android:text="" />
+
+    <Button
+        android:id="@+id/button_popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/button_take"
+        android:text="Menu" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView_Res"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="13dp"
+        android:maxHeight="5dip"
+        android:minHeight="5dip"
+        android:visibility="invisible" />
 
 </RelativeLayout>

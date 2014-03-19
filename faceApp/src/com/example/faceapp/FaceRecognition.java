@@ -61,6 +61,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -71,10 +73,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class FaceRecognition extends Activity {
+	
+	private final static String TAG="FaceRecognition";
+	
 	private Uri fileUri;
 	private ImageView imageView;
 	private ImageView imageView2;
@@ -84,7 +91,8 @@ public class FaceRecognition extends Activity {
 	private ListView listView1;
 	boolean upload_success = false;
 	ProgressDialog dialog = null;
-	
+	private ProgressBar mProgressBar; 
+	private int mDelay = 500;
 
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
@@ -162,7 +170,7 @@ public class FaceRecognition extends Activity {
 				loadPhoto(imageView, v.getWidth(), v.getHeight());
 			}
 		});
-		this.imageView2 = (ImageView) this.findViewById(R.id.imageView2);
+		this.imageView2 = (ImageView) findViewById(R.id.imageView2);
 		imageView2.setBackgroundResource(R.drawable.imageborder);
 		imageView2.setOnClickListener(new OnClickListener(){
 			@Override
@@ -171,7 +179,7 @@ public class FaceRecognition extends Activity {
 			}
 		});
 		
-		this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
+		imageView3 = (ImageView) findViewById(R.id.imageView_3);
 		imageView3.setBackgroundResource(R.drawable.imageborder);
 		imageView3.setOnClickListener(new OnClickListener(){
 			@Override
@@ -182,6 +190,8 @@ public class FaceRecognition extends Activity {
 		
 		textView_Res = (TextView) findViewById(R.id.textView_Res);
 		textView_Res.setMovementMethod(new ScrollingMovementMethod());
+		
+		mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
 		
 		//this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
 		//imageView3.setBackgroundResource(R.drawable.imageborder);
@@ -215,6 +225,51 @@ public class FaceRecognition extends Activity {
 			}
 		});
 
+		
+		//Add popup menu
+		Button button_popup = (Button)findViewById(R.id.button_popup);
+		button_popup.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				PopupMenu popupMenu = new PopupMenu(getApplicationContext(),v);
+				popupMenu.getMenuInflater().inflate(R.menu.popupmenu,popupMenu.getMenu());
+				
+				//popupMenu.getMenu().getItem(1).setEnabled(false); //set click to menu items 
+				
+				popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						// TODO Auto-generated method stub
+						//Toast.makeText(getApplicationContext(), item.toString(), Toast.LENGTH_SHORT).show();
+						
+						switch (item.getItemId()){
+						case R.id.menu1:
+							Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+							break;
+						case R.id.menu2:
+							//Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
+							detectFace();
+							break;
+						case R.id.menu3:
+							Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
+							break;
+						case R.id.menu4:
+							Toast.makeText(getApplicationContext(), "4", Toast.LENGTH_SHORT).show();
+							break;
+						}
+						
+						return true;
+					}
+				});
+				
+				popupMenu.show();
+			}
+			
+		});
+		
+		
+			
+		
 		
 		
 		// Detect Button
@@ -418,6 +473,77 @@ public class FaceRecognition extends Activity {
 		});
 	}
 
+	/*//Detect Face
+	private OnClickListener popupListener1 = new OnClickListener(){
+		@Override
+		public void onClick(View v){
+			
+		}
+	};*/
+	
+	
+	private void detectFace(){
+		if (bitmap == null) { //Check if there is an image
+			Context context = getApplicationContext();
+			CharSequence text = "Please Take a Photo";
+			int duration = Toast.LENGTH_SHORT;
+			Toast.makeText(context, text, duration).show();
+		} else {
+
+			new UploadImageTask().execute();		
+		}
+	}
+	
+	
+	class UploadImageTask extends AsyncTask<Integer,Integer,Bitmap>{
+			
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			// TODO Auto-generated method stub
+			mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			mProgressBar.setVisibility(ProgressBar.VISIBLE);
+			
+			dialog = ProgressDialog.show(FaceRecognition.this, "",
+					"Uploading file...", true);
+
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			// TODO Auto-generated method stub
+			mProgressBar.setProgress(values[0]);
+		}
+
+		@Override
+		protected Bitmap doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			uploadFile(fileUri.toString().substring(
+					fileUri.toString().indexOf("IMG")));
+						
+			for (int i=1;i<11;i++){
+				sleep();
+				publishProgress(i*10);
+			}
+			
+			return null;
+		}
+		
+		private void sleep(){
+			try{
+				Thread.sleep(mDelay);
+			}catch (InterruptedException e){
+				Log.e(TAG, e.toString());
+			}
+		}
+		
+	}
+	
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == IMAGE_SELECTOR && resultCode == Activity.RESULT_OK) {
