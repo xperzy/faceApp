@@ -3,6 +3,7 @@ package com.example.faceapp;
 import java.io.DataInputStream;
 import android.content.DialogInterface;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -93,16 +95,21 @@ public class FaceRecognition extends Activity {
 	ProgressDialog dialog = null;
 	private ProgressBar mProgressBar; 
 	private int mDelay = 500;
+	private boolean FACE_UPLOADED = false;
+	private boolean FACE_DETECTED = false;
+	private String jsonReply="";
+	private JSONObject detectJSONObj;
+	
 
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
 	//private static final String SERVER_IP_ADDRESS = "http://157.182.38.37/";
 	private static final String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
-	String imageServerUri_load = SERVER_IP_ADDRESS+"welcome.php";  //"http://157.182.38.37/welcome.php";
-	String imageServerUri_getD = SERVER_IP_ADDRESS+"getDetected.php"; //"http://157.182.38.37/getDetected.php";
-	String imageServerUri_getCrop = SERVER_IP_ADDRESS+"getCrop.php";//"http://157.182.38.37/getCrop.php";
-	String imageServerUri_getMesh = SERVER_IP_ADDRESS+"getMesh.php";//"http://157.182.38.37/getMesh.php";
-	String imageServerUri_getPoints = SERVER_IP_ADDRESS+"getPoints.php";
+	private static final String imageServerUri_load = SERVER_IP_ADDRESS+"welcome.php";  //"http://157.182.38.37/welcome.php";
+	private static final String imageServerUri_getD = SERVER_IP_ADDRESS+"getDetected.php"; //"http://157.182.38.37/getDetected.php";
+	private static final String imageServerUri_getCrop = SERVER_IP_ADDRESS+"getCrop.php";//"http://157.182.38.37/getCrop.php";
+	private static final String imageServerUri_getMesh = SERVER_IP_ADDRESS+"getMesh.php";//"http://157.182.38.37/getMesh.php";
+	private static final String imageServerUri_getPoints = SERVER_IP_ADDRESS+"getPoints.php";
 	
 	private ListView mLvPicasa;
 	private boolean mHasData = false;
@@ -129,7 +136,11 @@ public class FaceRecognition extends Activity {
 		setContentView(R.layout.activity_recog);
 
 		/************* Php script path ****************/
-		upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
+		//upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
+		
+		//3.20 test
+		upLoadServerUri = "http://157.182.38.24/php/upload_img_try.php";
+		
 		//imageServerUri = "http://157.182.38.37/uploads/4.jpg";
 
 		/*
@@ -187,6 +198,7 @@ public class FaceRecognition extends Activity {
 				loadPhoto(imageView3, v.getWidth(), v.getHeight());
 			}
 		});
+		
 		
 		textView_Res = (TextView) findViewById(R.id.textView_Res);
 		textView_Res.setMovementMethod(new ScrollingMovementMethod());
@@ -473,13 +485,7 @@ public class FaceRecognition extends Activity {
 		});
 	}
 
-	/*//Detect Face
-	private OnClickListener popupListener1 = new OnClickListener(){
-		@Override
-		public void onClick(View v){
-			
-		}
-	};*/
+
 	
 	
 	private void detectFace(){
@@ -490,7 +496,7 @@ public class FaceRecognition extends Activity {
 			Toast.makeText(context, text, duration).show();
 		} else {
 
-			new UploadImageTask().execute();		
+			new UploadImageTask().execute();
 		}
 	}
 	
@@ -501,6 +507,50 @@ public class FaceRecognition extends Activity {
 		protected void onPostExecute(Bitmap result) {
 			// TODO Auto-generated method stub
 			mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+			
+			//Draw points and images
+			
+			//Draw Rectangle and display on image view 3
+			try{
+				JSONArray rect_arr = (JSONArray)detectJSONObj.get("rectangle");
+				JSONObject rect = rect_arr.getJSONObject(0);
+				int x = rect.getInt("x");
+				int y = rect.getInt("y");
+				int w = rect.getInt("w");
+				int h = rect.getInt("h");
+				Bitmap cropBitmap = Bitmap.createBitmap(bitmap, x, y,
+					w, h);
+				Bitmap sizeBitmap = Bitmap.createScaledBitmap(cropBitmap,
+					imageView3.getWidth(), imageView3.getHeight(), true);
+				imageView3.setImageBitmap(sizeBitmap);				
+			}catch(JSONException e){
+				Log.e(TAG,"json draw rectangle error.");
+			}
+			
+			//Draw Points and display on main image view
+			try{
+				JSONArray rect_arr = (JSONArray)detectJSONObj.get("points");
+				
+				Bitmap pointBitmap = bitmap.copy(Bitmap.Config.ARGB_8888,true);
+				Canvas canvas = new Canvas(pointBitmap);
+				Paint paint = new Paint();
+				paint.setColor(Color.GREEN);
+				paint.setStyle(Paint.Style.FILL);
+				paint.setStrokeWidth(3);
+				for (int i=0;i<rect_arr.length();i++){
+					JSONArray point = rect_arr.getJSONArray(i);
+					canvas.drawPoint(point.getInt(1), point.getInt(0), paint);
+				}
+				
+				imageView.setImageBitmap(pointBitmap);
+				
+				
+				
+			}catch(JSONException e){
+				Log.e(TAG,"json draw points error.");
+			}
+
+			
 		}
 
 		@Override
@@ -525,10 +575,10 @@ public class FaceRecognition extends Activity {
 			uploadFile(fileUri.toString().substring(
 					fileUri.toString().indexOf("IMG")));
 						
-			for (int i=1;i<11;i++){
+			/*for (int i=1;i<11;i++){
 				sleep();
 				publishProgress(i*10);
-			}
+			}*/
 			
 			return null;
 		}
@@ -782,14 +832,31 @@ public class FaceRecognition extends Activity {
 						+ serverResponseMessage + ": " + serverResponseCode);
 
 				if (serverResponseCode == 200) {
+					//Get Response
+					InputStream is = conn.getInputStream();
+					BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+					String line;
+					StringBuffer response = new StringBuffer();
+					while((line=rd.readLine())!=null){
+						response.append(line);
+					}
+					jsonReply = response.toString();
+					rd.close();
+					
+					try{
+						detectJSONObj = new JSONObject(jsonReply);
+						Log.i(TAG,detectJSONObj.toString());
+					}catch(Throwable t){
+						Log.e(TAG,"Could NOT parch JSON: \""+jsonReply+"\"");
+					}
+					
 
 					runOnUiThread(new Runnable() {
 						public void run() {
-
 							Toast.makeText(FaceRecognition.this,
 									"File Upload Complete.", Toast.LENGTH_SHORT)
 									.show();
-							
+							//Toast.makeText(getApplicationContext(), jsonReply, Toast.LENGTH_LONG).show();
 						}
 					});
 

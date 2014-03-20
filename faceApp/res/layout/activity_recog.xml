@@ -20,7 +20,13 @@
             android:src="@drawable/blue_grid"
             android:scaleType="fitXY" />
 
-      
+        <ImageView
+            android:id="@+id/imageView_point"
+            android:layout_width="220dip"
+            android:layout_height="320dip"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY" />
     </FrameLayout>
     
     <ListView
@@ -68,33 +74,6 @@
         android:src="@drawable/face_a"
         android:scaleType="fitXY" />
 
-    <Button
-        android:id="@+id/button_dect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_recog"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/imageView3"
-        android:layout_marginTop="24dp"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:text="  Detect Face"
-        android:textColor="@color/colorlist"
-        android:textSize="12dp" />
-
-    <Button
-        android:id="@+id/button_recog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/button_dect"
-        android:layout_marginTop="15dp"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:text="  Recognize Face  "
-        android:textColor="@color/colorlist"
-        android:textSize="12sp" />
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
@@ -134,5 +113,30 @@
         android:maxHeight="5dip"
         android:minHeight="5dip"
         android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/button_recog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/progressBar"
+        android:layout_alignParentRight="true"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="  Recognize Face  "
+        android:textColor="@color/colorlist"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/button_dect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_recog"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/button_popup"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="  Detect Face"
+        android:textColor="@color/colorlist"
+        android:textSize="12dp" />
 
 </RelativeLayout>
