@@ -256,17 +256,20 @@ public class FaceRecognition extends Activity {
 						
 						switch (item.getItemId()){
 						case R.id.menu1:
-							Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+							takePhoto();
 							break;
 						case R.id.menu2:
 							//Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
 							detectFace();
 							break;
 						case R.id.menu3:
-							Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
+							recognizeFace();
 							break;
 						case R.id.menu4:
-							Toast.makeText(getApplicationContext(), "4", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(getApplicationContext(), "4", Toast.LENGTH_SHORT).show();
+							computeBMI();
 							break;
 						}
 						
@@ -284,7 +287,7 @@ public class FaceRecognition extends Activity {
 		
 		
 		
-		// Detect Button
+	/*	// Detect Button
 		Button btnDect = (Button) findViewById(R.id.button_dect);
 		btnDect.setOnClickListener(new OnClickListener() {
 			@Override
@@ -348,12 +351,6 @@ public class FaceRecognition extends Activity {
 					// MyVolley.init(FaceRecognition.this);
 					
 						ImageLoader imageLoader = MyVolley.getImageLoader();
-						//Draw big detected Face image
-						/*imageLoader.get(imageServerUri_getD + "?link="
-								+ fileUri.toString(), ImageLoader
-								.getImageListener(imageView,
-										R.drawable.no_image,
-										R.drawable.error_image));*/
 						
 						imageLoader.get(imageServerUri_getD + "?name="
 						+ fileUri.toString(), new ImageListener(){
@@ -391,30 +388,6 @@ public class FaceRecognition extends Activity {
 								.getImageListener(imageView3,
 										R.drawable.no_image,
 										R.drawable.blank_photo));
-						
-						
-					
-						
-						
-					//Toast.makeText(getApplicationContext(), "Detected Face Image Retrieved", Toast.LENGTH_SHORT).show();
-											
-						
-						
-					// TODO: write function for drawing
-					// TODO: face region and facial points
-					/*
-					 * Paint paint = new Paint(); paint.setColor(Color.GREEN);
-					 * 
-					 * Bitmap tempBitmap =
-					 * Bitmap.createBitmap(bitmap.getWidth(),
-					 * bitmap.getHeight(), Bitmap.Config.RGB_565); Canvas canvas
-					 * = new Canvas(tempBitmap); canvas.drawBitmap(bitmap, 0, 0,
-					 * null); canvas.drawCircle(60, 50, 25, paint); ImageView
-					 * imageView = (ImageView)findViewById(R.id.imageView2);
-					 * //Attach the canvas to the ImageView
-					 * imageView.setImageDrawable(new
-					 * BitmapDrawable(getResources(), tempBitmap));;
-					 */
 				}
 
 			}
@@ -482,12 +455,12 @@ public class FaceRecognition extends Activity {
 				startActivityForResult(chooser, IMAGE_SELECTOR);
 
 			}
-		});
+		});*/
 	}
 
 
 	
-	
+	//Detect face: response to the button in popupmenu
 	private void detectFace(){
 		if (bitmap == null) { //Check if there is an image
 			Context context = getApplicationContext();
@@ -499,6 +472,64 @@ public class FaceRecognition extends Activity {
 			new UploadImageTask().execute();
 		}
 	}
+	
+	//RecognizeFace: response to the button in popupmenu
+	private void recognizeFace(){
+		if (bitmap == null) {
+			Context context = getApplicationContext();
+			CharSequence text = "Please Detect Face!";
+			int duration = Toast.LENGTH_SHORT;
+
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+
+		} else {
+			// Show Matched Faces from Server on the Image List
+			if (!mHasData && !mInError) {
+				loadPage();
+			}
+		}
+	}
+	
+	//Take Photo: response to the button in popupmenu
+	private void takePhoto(){
+		Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT,
+				null);
+		galleryintent.setType("image/*");
+
+		// This can work as well
+		// Intent galleryintent = new Intent(Intent.ACTION_PICK,
+		// android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+		Intent cameraIntent = new Intent(
+				android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a
+															// file to
+															// save the
+															// image
+		Log.i("fileUri", fileUri.toString());
+		cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set
+																	// the
+																	// image
+																	// file
+																	// name
+		cameraIntent.putExtra("return-data", true);
+
+		Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+		chooser.putExtra(Intent.EXTRA_INTENT, galleryintent);
+		chooser.putExtra(Intent.EXTRA_TITLE, "Select Source");
+
+		Intent[] intentArray = { cameraIntent };
+		chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+		startActivityForResult(chooser, IMAGE_SELECTOR);
+
+	}
+	
+	//Comput BMI: response to the button in popupmenu
+	private void computeBMI(){
+		Toast.makeText(getApplicationContext(), "Comput BMI", Toast.LENGTH_SHORT).show();
+	}
+	
 	
 	
 	class UploadImageTask extends AsyncTask<Integer,Integer,Bitmap>{

@@ -17,8 +17,8 @@
             android:layout_height="320dip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/blue_grid"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:src="@drawable/blue_grid" />
 
         <ImageView
             android:id="@+id/imageView_point"
@@ -28,26 +28,12 @@
             android:layout_alignParentTop="true"
             android:scaleType="fitXY" />
     </FrameLayout>
-    
+
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
         android:layout_height="320dip"
-        android:layout_toRightOf="@+id/FrameView1"
-        />
-
-    <Button
-        android:id="@+id/button_take"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_recog"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/button_recog"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:text="  Take Photo"
-        android:textColor="@color/colorlist"
-        android:textSize="12dp" />
+        android:layout_toRightOf="@+id/FrameView1" />
 
     <FrameLayout
         android:id="@+id/FrameView2"
@@ -60,9 +46,8 @@
             android:id="@+id/imageView2"
             android:layout_width="110dip"
             android:layout_height="110dip"
-            android:src="@drawable/facial_b"
-            android:scaleType="fitXY" />
-
+            android:scaleType="fitXY"
+            android:src="@drawable/facial_b" />
     </FrameLayout>
 
     <ImageView
@@ -71,36 +56,8 @@
         android:layout_height="110dip"
         android:layout_below="@+id/FrameView1"
         android:layout_toLeftOf="@+id/listView1"
-        android:src="@drawable/face_a"
-        android:scaleType="fitXY" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button_recog"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/White"
-        android:text="Top 10 Matched Persons" />
-
-    <TextView
-        android:id="@+id/textView_Res"
-        android:layout_width="120dip"
-        android:layout_height="50dip"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/White"
-        android:scrollbars="vertical"
-        android:layout_alignTop="@+id/button_take"
-        android:text="" />
-
-    <Button
-        android:id="@+id/button_popup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="15dp"
-        android:layout_toLeftOf="@+id/button_take"
-        android:text="Menu" />
+        android:scaleType="fitXY"
+        android:src="@drawable/face_a" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -115,28 +72,26 @@
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/button_recog"
+        android:id="@+id/button_popup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/progressBar"
+        android:layout_alignLeft="@+id/listView1"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:text="  Recognize Face  "
-        android:textColor="@color/colorlist"
-        android:textSize="12sp" />
+        android:text="Menu"
+        android:textColor="@color/colorlist" />
 
-    <Button
-        android:id="@+id/button_dect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_recog"
+    <TextView
+        android:id="@+id/textView_Res"
+        android:layout_width="120dip"
+        android:layout_height="50dip"
+        android:layout_alignBottom="@+id/imageView_3"
+        android:layout_alignLeft="@+id/listView1"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/button_popup"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:text="  Detect Face"
-        android:textColor="@color/colorlist"
-        android:textSize="12dp" />
+        android:layout_below="@+id/FrameView1"
+        android:background="@drawable/gray_grid"
+        android:scrollbars="vertical"
+        android:textColor="@color/White" />
 
 </RelativeLayout>

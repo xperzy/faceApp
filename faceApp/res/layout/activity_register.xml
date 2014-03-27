@@ -1,11 +1,121 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    <ListView
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-        android:id="@+id/lv_picasa" 
+    android:orientation="vertical"
     >
-    </ListView>
+
+    <TextView
+        android:id="@+id/textView_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+
+    <EditText
+        android:id="@+id/editText_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint=""
+        android:inputType="text" />
+
+    
+    <TextView
+        android:id="@+id/textView_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/radioButton_male"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioButton_male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:textColor="@color/colorlist" />
+
+        <RadioButton
+            android:id="@+id/radioButton_female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:textColor="@color/colorlist" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <NumberPicker android:id="@+id/numberpicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />    
+    
+    <TextView
+        android:id="@+id/textView_race"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ethnicity:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/radioButton_asian"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioButton_asian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorlist"
+            android:text="Asian" />
+
+        <RadioButton
+            android:id="@+id/radioButton_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorlist"
+            android:text="Black" />
+
+        <RadioButton
+            android:id="@+id/radioButton_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorlist"
+            android:text="White" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Photo"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <ImageView
+        android:id="@+id/imageView_photo"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:scaleType="fitXY"
+        android:src="@drawable/blank_photo" />
+
+    <Button
+        android:id="@+id/button_register"
+        android:layout_width="228dp"
+        android:layout_height="wrap_content"
+        android:background="@color/Button_Blue"
+        android:text="Register"
+        android:textColor="@color/colorlist" />
+
 </LinearLayout>

@@ -1,6 +1,10 @@
 package com.example.faceapp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,113 +18,236 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.Toast;
 
 public class FaceRegister extends Activity {
-	private static final int RESULTS_PAGE_SIZE = 10;
-	String imageServerUri = "http://157.182.38.37/welcome.php";
-	private ListView mLvPicasa;
-	private boolean mHasData = false;
-	private boolean mInError = false;
-	private ArrayList<MatchedFace> mEntries = new ArrayList<MatchedFace>();
-	private MatchedFaceAdapter2 mAdapter;
+	private String name = "";
+	private String gender = "male";
+	private String race = "Asian";
+	private int age = 0;
+	private Bitmap bitmap;
+	private ImageView imageView;
+
+	private Uri fileUri;
+	private static final int IMAGE_SELECTOR = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
-		mLvPicasa = (ListView) findViewById(R.id.lv_picasa);
-		mAdapter = new MatchedFaceAdapter2(this,
-				R.layout.listview_item_row_volley, mEntries,
-				MyVolley.getImageLoader());
-		mLvPicasa.setAdapter(mAdapter);
+
+		// get name
+		final EditText textView_name = (EditText) findViewById(R.id.editText_name);
+
+		// get Age
+		NumberPicker numberPicker = (NumberPicker) findViewById(R.id.numberpicker);
+		numberPicker.setMaxValue(200);
+		numberPicker.setMinValue(1);
+		numberPicker.setValue(25);
+		numberPicker.setWrapSelectorWheel(true);
+		numberPicker
+				.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+					@Override
+					public void onValueChange(NumberPicker picker, int oldVal,
+							int newVal) {
+						// TODO Auto-generated method stub
+						age = newVal;
+					}
+				});
+
+		// Gender radio button group
+		final OnClickListener radioListener_gender = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				RadioButton rb = (RadioButton) v;
+				gender = rb.getText().toString();
+			}
+		};
+		final RadioButton rButton_male = (RadioButton) findViewById(R.id.radioButton_male);
+		rButton_male.setOnClickListener(radioListener_gender);
+		final RadioButton rButton_female = (RadioButton) findViewById(R.id.radioButton_female);
+		rButton_female.setOnClickListener(radioListener_gender);
+
+		// Race radio button group
+		final OnClickListener radioListener_race = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				RadioButton rb = (RadioButton) v;
+				race = rb.getText().toString();
+			}
+		};
+		final RadioButton rButton_asian = (RadioButton) findViewById(R.id.radioButton_asian);
+		rButton_asian.setOnClickListener(radioListener_race);
+		final RadioButton rButton_black = (RadioButton) findViewById(R.id.radioButton_black);
+		rButton_black.setOnClickListener(radioListener_race);
+		final RadioButton rButton_white = (RadioButton) findViewById(R.id.radioButton_white);
+		rButton_white.setOnClickListener(radioListener_race);
+
+		// Photo
+		this.imageView = (ImageView) this.findViewById(R.id.imageView_photo);
+		imageView.setBackgroundResource(R.drawable.imageborder);
+		imageView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT,
+						null);
+				galleryintent.setType("image/*");
+
+				Intent cameraIntent = new Intent(
+						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a
+																	// file to
+																	// save the
+																	// image
+				Log.i("fileUri", fileUri.toString());
+				cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set
+																			// the
+																			// image
+																			// file
+																			// name
+				cameraIntent.putExtra("return-data", true);
+
+				Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+				chooser.putExtra(Intent.EXTRA_INTENT, galleryintent);
+				chooser.putExtra(Intent.EXTRA_TITLE, "Select Source");
+
+				Intent[] intentArray = { cameraIntent };
+				chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+				startActivityForResult(chooser, IMAGE_SELECTOR);
+
+			}
+		});
+
+		// Button register
+		final Button button_reg = (Button) findViewById(R.id.button_register);
+		button_reg.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				name = textView_name.getText().toString();
+				if (name.isEmpty()) {
+					Toast.makeText(getApplicationContext(),
+							"Please Input a Name", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							name + gender.toString() + age, Toast.LENGTH_LONG)
+							.show();
+				}
+			}
+		});
 
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-
-		if (!mHasData && !mInError) {
-			loadPage();
-		}
-	}
-
-	private void loadPage() {
-		RequestQueue queue = MyVolley.getRequestQueue();
-
-		int startIndex = 1 + mEntries.size();
-		/*
-		 * JsonObjectRequest myReq = new JsonObjectRequest(Method.GET,
-		 * "https://picasaweb.google.com/data/feed/api/all?q=kitten&max-results="
-		 * + RESULTS_PAGE_SIZE + "&thumbsize=160&alt=json" + "&start-index=" +
-		 * startIndex, null, createMyReqSuccessListener(),
-		 * createMyReqErrorListener());
-		 */
-		JsonObjectRequest myReq = new JsonObjectRequest(Method.GET,
-				imageServerUri, null, createMyReqSuccessListener(),
-				createMyReqErrorListener());
-
-		queue.add(myReq);
-	}
-
-	private Response.Listener<JSONObject> createMyReqSuccessListener() {
-		return new Response.Listener<JSONObject>() {
-			@Override
-			public void onResponse(JSONObject response) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == IMAGE_SELECTOR && resultCode == Activity.RESULT_OK) {
+			if (data == null) {
 				try {
-					JSONObject feed = response.getJSONObject("feed");
-					//Log.i("feed",feed.toString());
-					JSONArray entries = feed.getJSONArray("entry");
-					//Log.i("entries",entries.toString());
-					JSONObject entry;
-					//for (int i = 0; i < entries.length(); i++) {
-					for (int i = 0; i < RESULTS_PAGE_SIZE; i++) {
-						entry = entries.getJSONObject(i);
-						Log.i("entry",entry.toString());
-						String url = null;
+					bitmap = BitmapFactory.decodeStream(getContentResolver()
+							.openInputStream(fileUri));
+					Matrix matrix = new Matrix();
+					matrix.postRotate((float) 90.0);
+					Bitmap rotaBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+							bitmap.getWidth(), bitmap.getHeight(), matrix,
+							false);
+					Bitmap sizeBitmap = Bitmap.createScaledBitmap(rotaBitmap,
+							540, 800, true);
 
-						JSONObject media = entry.getJSONObject("media$group");
-						//Log.i("media",media.toString());
-						if (media != null && media.has("media$thumbnail")) {
-							Log.i("media",media.toString());
-							JSONArray thumbs = media
-											.getJSONArray("media$thumbnail");
-							Log.i("thumbs",thumbs.toString());
-							if (thumbs != null && thumbs.length() > 0) {
-								url = thumbs.getJSONObject(0).getString("url");
-							}
-						}
-						Log.i("url",url);
-						mEntries.add(new MatchedFace(entry.getJSONObject(
-								"title").getString("$t"), url));
-					}
-					mAdapter.notifyDataSetChanged();
-				} catch (JSONException e) {
-					showErrorDialog();
+					imageView.setImageBitmap(sizeBitmap);
+
+				} catch (FileNotFoundException e) {
+
+					e.printStackTrace();
 				}
+
 			}
-		};
+
+			else {
+				Uri selectedImageUri = data.getData();
+				try {
+					bitmap = BitmapFactory.decodeStream(getContentResolver()
+							.openInputStream(selectedImageUri));
+					Bitmap sizeBitmap = Bitmap.createScaledBitmap(bitmap, 540,
+							800, true);
+					imageView.setImageBitmap(sizeBitmap);
+
+				} catch (FileNotFoundException e) {
+
+					e.printStackTrace();
+				}
+
+			}
+
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+
 	}
 
-	private Response.ErrorListener createMyReqErrorListener() {
-		return new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				Log.i("error",error.toString());
-				showErrorDialog();
-			}
-		};
+	public static final int MEDIA_TYPE_IMAGE = 1;
+	public static final int MEDIA_TYPE_VIDEO = 2;
+
+	/** Create a file Uri for saving an image or video */
+	private static Uri getOutputMediaFileUri(int type) {
+		return Uri.fromFile(getOutputMediaFile(type));
 	}
 
-	private void showErrorDialog() {
-		mInError = true;
+	/** Create a File for saving an image or video */
+	private static File getOutputMediaFile(int type) {
+		// To be safe, you should check that the SDCard is mounted
+		// using Environment.getExternalStorageState() before doing this.
 
-		AlertDialog.Builder b = new AlertDialog.Builder(FaceRegister.this);
-		b.setMessage("Error occured");
-		b.show();
+		File mediaStorageDir = new File(
+				Environment
+						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+				"");
+		// This location works best if you want the created images to be shared
+		// between applications and persist after your app has been uninstalled.
+
+		// Create the storage directory if it does not exist
+		if (!mediaStorageDir.exists()) {
+			if (!mediaStorageDir.mkdirs()) {
+				Log.d("MyCameraApp", "failed to create directory");
+				return null;
+			}
+		}
+
+		// Create a media file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(new Date());
+		File mediaFile;
+		if (type == MEDIA_TYPE_IMAGE) {
+			mediaFile = new File(mediaStorageDir.getPath() + File.separator
+					+ "IMG_" + timeStamp + ".jpg");
+			Log.i("newImg", "True");
+		} else if (type == MEDIA_TYPE_VIDEO) {
+			mediaFile = new File(mediaStorageDir.getPath() + File.separator
+					+ "VID_" + timeStamp + ".mp4");
+		} else {
+			return null;
+		}
+
+		return mediaFile;
 	}
 
 }
