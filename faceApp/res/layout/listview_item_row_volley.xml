@@ -15,5 +15,6 @@
 	    android:layout_height="wrap_content"
 	    android:id="@+id/tv_title"
 	    android:layout_marginLeft="5dp"
+	    android:textColor="@color/colorlist"
     />
 </LinearLayout>

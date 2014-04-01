@@ -86,12 +86,103 @@
         android:id="@+id/textView_Res"
         android:layout_width="120dip"
         android:layout_height="50dip"
-        android:layout_alignBottom="@+id/imageView_3"
+        android:layout_above="@+id/button_popup"
         android:layout_alignLeft="@+id/listView1"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/FrameView1"
         android:background="@drawable/gray_grid"
         android:scrollbars="vertical"
         android:textColor="@color/White" />
+
+    <TextView
+        android:id="@+id/textView_pred_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView_Res"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/textView_Res"
+        android:background="@color/Button_Blue"
+        android:text="Predicted:"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorlist" />
+
+    <TextView
+        android:id="@+id/textView_gender_lab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_pred_label"
+        android:layout_marginTop="11dp"
+        android:layout_toRightOf="@+id/imageView_3"
+        android:text="-Gender:"
+        android:textColor="@color/colorlist" />
+
+    <TextView
+        android:id="@+id/textView_age_lab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView_bmi_lab"
+        android:layout_below="@+id/textView_gender_lab"
+        android:layout_marginTop="11dp"
+        android:text="-Age:"
+        android:textColor="@color/colorlist" />
+
+    <TextView
+        android:id="@+id/textView_race_lab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView_3"
+        android:layout_alignLeft="@+id/textView_age_lab"
+        android:text="-Ethnicity:"
+        android:textColor="@color/colorlist" />
+
+    <TextView
+        android:id="@+id/textView_bmi_lab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView_Res"
+        android:layout_alignLeft="@+id/textView_Res"
+        android:layout_marginBottom="10dp"
+        android:text="-BMI:"
+        android:textColor="@color/colorlist" />
+
+    <TextView
+        android:id="@+id/textView_bmi_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView_bmi_lab"
+        android:layout_alignBottom="@+id/textView_bmi_lab"
+        android:layout_alignLeft="@+id/textView_race_val"
+        android:text="N/A"
+        android:textColor="@color/YellowGreen" />
+
+    <TextView
+        android:id="@+id/textView_race_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView_race_lab"
+        android:layout_alignBottom="@+id/textView_race_lab"
+        android:layout_toRightOf="@+id/textView_race_lab"
+        android:text="N/A  0.00%"
+        android:textColor="@color/YellowGreen" />
+
+    <TextView
+        android:id="@+id/textView_age_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView_age_lab"
+        android:layout_alignBottom="@+id/textView_age_lab"
+        android:layout_alignLeft="@+id/textView_race_val"
+        android:text="N/A  0.00%"
+        android:textColor="@color/YellowGreen" />
+
+    <TextView
+        android:id="@+id/textView_gender_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView_age_lab"
+        android:layout_alignLeft="@+id/textView_age_val"
+        android:text="N/A  0.00%"
+        android:textColor="@color/YellowGreen" />
 
 </RelativeLayout>

@@ -81,36 +81,47 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FaceRecognition extends Activity {
-	
-	private final static String TAG="FaceRecognition";
-	
+
+	private final static String TAG = "FaceRecognition";
+
 	private Uri fileUri;
 	private ImageView imageView;
 	private ImageView imageView2;
 	private ImageView imageView3;
 	private TextView textView_Res;
+	private TextView textView_gender;
+	private TextView textView_race;
+	private TextView textView_age;
+	private TextView textView_bmi;
+
 	private Bitmap bitmap;
 	private ListView listView1;
 	boolean upload_success = false;
 	ProgressDialog dialog = null;
-	private ProgressBar mProgressBar; 
+	private ProgressBar mProgressBar;
 	private int mDelay = 500;
 	private boolean FACE_UPLOADED = false;
 	private boolean FACE_DETECTED = false;
-	private String jsonReply="";
+	private String jsonReply = "";
 	private JSONObject detectJSONObj;
-	
 
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
-	//private static final String SERVER_IP_ADDRESS = "http://157.182.38.37/";
+	// private static final String SERVER_IP_ADDRESS = "http://157.182.38.37/";
 	private static final String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
-	private static final String imageServerUri_load = SERVER_IP_ADDRESS+"welcome.php";  //"http://157.182.38.37/welcome.php";
-	private static final String imageServerUri_getD = SERVER_IP_ADDRESS+"getDetected.php"; //"http://157.182.38.37/getDetected.php";
-	private static final String imageServerUri_getCrop = SERVER_IP_ADDRESS+"getCrop.php";//"http://157.182.38.37/getCrop.php";
-	private static final String imageServerUri_getMesh = SERVER_IP_ADDRESS+"getMesh.php";//"http://157.182.38.37/getMesh.php";
-	private static final String imageServerUri_getPoints = SERVER_IP_ADDRESS+"getPoints.php";
-	
+	private static final String imageServerUri_load = SERVER_IP_ADDRESS
+			+ "load_list.php"; // "http://157.182.38.37/welcome.php";
+	private static final String imageServerUri_getD = SERVER_IP_ADDRESS
+			+ "getDetected.php"; // "http://157.182.38.37/getDetected.php";
+	private static final String imageServerUri_getCrop = SERVER_IP_ADDRESS
+			+ "getCrop.php";// "http://157.182.38.37/getCrop.php";
+	private static final String imageServerUri_getMesh = SERVER_IP_ADDRESS
+			+ "getMesh.php";// "http://157.182.38.37/getMesh.php";
+	private static final String imageServerUri_getPoints = SERVER_IP_ADDRESS
+			+ "getPoints.php";
+	private static final String imageServerUri_getBMI = SERVER_IP_ADDRESS
+			+ "computeBMI.php";
+
 	private ListView mLvPicasa;
 	private boolean mHasData = false;
 	private boolean mInError = false;
@@ -136,12 +147,12 @@ public class FaceRecognition extends Activity {
 		setContentView(R.layout.activity_recog);
 
 		/************* Php script path ****************/
-		//upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
-		
-		//3.20 test
+		// upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
+
+		// 3.20 test
 		upLoadServerUri = "http://157.182.38.24/php/upload_img_try.php";
-		
-		//imageServerUri = "http://157.182.38.37/uploads/4.jpg";
+
+		// imageServerUri = "http://157.182.38.37/uploads/4.jpg";
 
 		/*
 		 * final MatchedFace matchedFace_data[] = new MatchedFace[] { new
@@ -172,10 +183,10 @@ public class FaceRecognition extends Activity {
 		 * 
 		 * } });
 		 */
-		
+
 		this.imageView = (ImageView) this.findViewById(R.id.imageView1);
 		imageView.setBackgroundResource(R.drawable.imageborder);
-		imageView.setOnClickListener(new OnClickListener(){
+		imageView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				loadPhoto(imageView, v.getWidth(), v.getHeight());
@@ -183,35 +194,43 @@ public class FaceRecognition extends Activity {
 		});
 		this.imageView2 = (ImageView) findViewById(R.id.imageView2);
 		imageView2.setBackgroundResource(R.drawable.imageborder);
-		imageView2.setOnClickListener(new OnClickListener(){
+		imageView2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				loadPhoto(imageView2, v.getWidth(), v.getHeight());
 			}
 		});
-		
+
 		imageView3 = (ImageView) findViewById(R.id.imageView_3);
 		imageView3.setBackgroundResource(R.drawable.imageborder);
-		imageView3.setOnClickListener(new OnClickListener(){
+		imageView3.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				loadPhoto(imageView3, v.getWidth(), v.getHeight());
 			}
 		});
-		
-		
+
+		textView_gender = (TextView) findViewById(R.id.textView_gender_val);
+		textView_race = (TextView) findViewById(R.id.textView_race_val);
+		textView_age = (TextView) findViewById(R.id.textView_age_val);
+		textView_bmi = (TextView) findViewById(R.id.textView_bmi_val);
+
 		textView_Res = (TextView) findViewById(R.id.textView_Res);
 		textView_Res.setMovementMethod(new ScrollingMovementMethod());
+
+		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
 		
-		mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
+		loadPage();
 		
-		//this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
-		//imageView3.setBackgroundResource(R.drawable.imageborder);
+		
+		// this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
+		// imageView3.setBackgroundResource(R.drawable.imageborder);
 
 		// Image List View
 
 		mLvPicasa = (ListView) findViewById(R.id.listView1);
-		//mLvPicasa.setBackgroundColor(getResources().getColor(R.color.Background_Gray));
+		// mLvPicasa.setBackgroundColor(getResources().getColor(R.color.Background_Gray));
 		mLvPicasa.setBackgroundResource(R.drawable.imageborder);
 		View header = (View) getLayoutInflater().inflate(
 				R.layout.listview_header_row, null);
@@ -230,239 +249,196 @@ public class FaceRecognition extends Activity {
 				String item = mf.getTitle();
 				Toast.makeText(getBaseContext(), item, Toast.LENGTH_SHORT)
 						.show();
-				Intent intent = new Intent(FaceRecognition.this,FaceDetail.class);
-				intent.putExtra("face_title",mf.getTitle());
-				intent.putExtra("face_uri",mf.getThumbnailUrl());
+				Intent intent = new Intent(FaceRecognition.this,
+						FaceDetail.class);
+				intent.putExtra("face_title", mf.getTitle());
+				intent.putExtra("face_uri", mf.getThumbnailUrl());
 				startActivity(intent);
 			}
 		});
 
-		
-		//Add popup menu
-		Button button_popup = (Button)findViewById(R.id.button_popup);
-		button_popup.setOnClickListener(new OnClickListener(){
+		// Add popup menu
+		Button button_popup = (Button) findViewById(R.id.button_popup);
+		button_popup.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				PopupMenu popupMenu = new PopupMenu(getApplicationContext(),v);
-				popupMenu.getMenuInflater().inflate(R.menu.popupmenu,popupMenu.getMenu());
-				
-				//popupMenu.getMenu().getItem(1).setEnabled(false); //set click to menu items 
-				
-				popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-					@Override
-					public boolean onMenuItemClick(MenuItem item) {
-						// TODO Auto-generated method stub
-						//Toast.makeText(getApplicationContext(), item.toString(), Toast.LENGTH_SHORT).show();
-						
-						switch (item.getItemId()){
-						case R.id.menu1:
-							//Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
-							takePhoto();
-							break;
-						case R.id.menu2:
-							//Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
-							detectFace();
-							break;
-						case R.id.menu3:
-							//Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
-							recognizeFace();
-							break;
-						case R.id.menu4:
-							//Toast.makeText(getApplicationContext(), "4", Toast.LENGTH_SHORT).show();
-							computeBMI();
-							break;
-						}
-						
-						return true;
-					}
-				});
-				
+				PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
+				popupMenu.getMenuInflater().inflate(R.menu.popupmenu,
+						popupMenu.getMenu());
+
+				// popupMenu.getMenu().getItem(1).setEnabled(false); //set click
+				// to menu items
+
+				popupMenu
+						.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+							@Override
+							public boolean onMenuItemClick(MenuItem item) {
+								// TODO Auto-generated method stub
+								// Toast.makeText(getApplicationContext(),
+								// item.toString(), Toast.LENGTH_SHORT).show();
+
+								switch (item.getItemId()) {
+								case R.id.menu1:
+									// Toast.makeText(getApplicationContext(),
+									// "1", Toast.LENGTH_SHORT).show();
+									takePhoto();
+									break;
+								case R.id.menu2:
+									// Toast.makeText(getApplicationContext(),
+									// "2", Toast.LENGTH_SHORT).show();
+									detectFace();
+									break;
+								case R.id.menu3:
+									// Toast.makeText(getApplicationContext(),
+									// "3", Toast.LENGTH_SHORT).show();
+									recognizeFace();
+									break;
+								case R.id.menu4:
+									// Toast.makeText(getApplicationContext(),
+									// "4", Toast.LENGTH_SHORT).show();
+									computeBMI();
+									break;
+								}
+
+								return true;
+							}
+						});
+
 				popupMenu.show();
 			}
-			
-		});
-		
-		
-			
-		
-		
-		
-	/*	// Detect Button
-		Button btnDect = (Button) findViewById(R.id.button_dect);
-		btnDect.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO: Apply Face Detection
-				// Create a new image bitmap and attach a brand new canvas to it
 
-				// TODO: check if the Bitmap exists
-				if (bitmap == null) {
-					Context context = getApplicationContext();
-					CharSequence text = "Please Add One Photo!";
-					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-
-				} else {
-
-					dialog = ProgressDialog.show(FaceRecognition.this, "",
-							"Uploading file...", true);
-
-					
-					final CountDownLatch latch = new CountDownLatch(1); //wait for the thread finished				
-					new Thread(new Runnable() {
-						public void run() {
-							// uploadFile(fileUri); // used for upload face
-							// image
-							uploadFile(fileUri.toString().substring(
-									fileUri.toString().indexOf("IMG")));
-							latch.countDown();
-						}
-					}).start();
-					
-							
-					try {
-						latch.await();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					
-					
-					//Get Detected Points
-					RequestQueue queue = MyVolley.getRequestQueue();
-	                
-	                JsonObjectRequest myReq = new JsonObjectRequest(Method.GET, 
-	                		imageServerUri_getPoints+"?name="+fileUri.toString().substring(
-									fileUri.toString().indexOf("IMG")),
-	                                                        null,
-	                                                        createMyReqSuccessListener2(),
-	                                                        createMyReqErrorListener2());
-
-	                queue.add(myReq);
-					
-					
-					
-					
-					
-					// Get a detected photo from server
-					// MyVolley.init(FaceRecognition.this);
-					
-						ImageLoader imageLoader = MyVolley.getImageLoader();
-						
-						imageLoader.get(imageServerUri_getD + "?name="
-						+ fileUri.toString(), new ImageListener(){
-							@Override
-				            public void onErrorResponse(VolleyError error) {
-				                //if (errorImageResId != 0) {
-				                //    imageView.setImageResource(errorImageResId);
-				                //}
-								Toast.makeText(FaceRecognition.this, "No Face Detected!!!", Toast.LENGTH_LONG).show();
-				            }
-
-				            @Override
-				            public void onResponse(ImageContainer response, boolean isImmediate) {
-				                if (response.getBitmap() != null) {
-				                    imageView.setImageBitmap(response.getBitmap());
-				                } else if (R.drawable.blank_photo != 0) {
-				                    imageView.setImageResource(R.drawable.blank_photo);
-				                }
-				            }
-						}
-						);
-						
-						
-						
-						
-						//Draw cropped Face image
-						imageLoader.get(imageServerUri_getCrop + "?name="
-								+ fileUri.toString(), ImageLoader
-								.getImageListener(imageView2,
-										R.drawable.no_image,
-										R.drawable.blank_photo));
-						//Draw meshed Face image
-						imageLoader.get(imageServerUri_getCrop + "?name="
-								+ fileUri.toString(), ImageLoader
-								.getImageListener(imageView3,
-										R.drawable.no_image,
-										R.drawable.blank_photo));
-				}
-
-			}
 		});
 
-		// Recognize Button
-		Button btnRecog = (Button) findViewById(R.id.button_recog);
-		btnRecog.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO: Apply Face Detection
-				// Create a new image bitmap and attach a brand new canvas to it
-
-				// TODO: check if the Bitmap exists
-				if (bitmap == null) {
-					Context context = getApplicationContext();
-					CharSequence text = "Please Detect Face!";
-					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-
-				} else {
-					// Show Matched Faces from Server on the Image List
-					if (!mHasData && !mInError) {
-						loadPage();
-					}
-				}
-			}
-		});
-
-		// Take photo button
-		Button btn = (Button) findViewById(R.id.button_take);
-		btn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT,
-						null);
-				galleryintent.setType("image/*");
-
-				// This can work as well
-				// Intent galleryintent = new Intent(Intent.ACTION_PICK,
-				// android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-				Intent cameraIntent = new Intent(
-						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a
-																	// file to
-																	// save the
-																	// image
-				Log.i("fileUri", fileUri.toString());
-				cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set
-																			// the
-																			// image
-																			// file
-																			// name
-				cameraIntent.putExtra("return-data", true);
-
-				Intent chooser = new Intent(Intent.ACTION_CHOOSER);
-				chooser.putExtra(Intent.EXTRA_INTENT, galleryintent);
-				chooser.putExtra(Intent.EXTRA_TITLE, "Select Source");
-
-				Intent[] intentArray = { cameraIntent };
-				chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-				startActivityForResult(chooser, IMAGE_SELECTOR);
-
-			}
-		});*/
+		/*
+		 * // Detect Button Button btnDect = (Button)
+		 * findViewById(R.id.button_dect); btnDect.setOnClickListener(new
+		 * OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { // TODO: Apply Face Detection
+		 * // Create a new image bitmap and attach a brand new canvas to it
+		 * 
+		 * // TODO: check if the Bitmap exists if (bitmap == null) { Context
+		 * context = getApplicationContext(); CharSequence text =
+		 * "Please Add One Photo!"; int duration = Toast.LENGTH_SHORT;
+		 * 
+		 * Toast toast = Toast.makeText(context, text, duration); toast.show();
+		 * 
+		 * } else {
+		 * 
+		 * dialog = ProgressDialog.show(FaceRecognition.this, "",
+		 * "Uploading file...", true);
+		 * 
+		 * 
+		 * final CountDownLatch latch = new CountDownLatch(1); //wait for the
+		 * thread finished new Thread(new Runnable() { public void run() { //
+		 * uploadFile(fileUri); // used for upload face // image
+		 * uploadFile(fileUri.toString().substring(
+		 * fileUri.toString().indexOf("IMG"))); latch.countDown(); } }).start();
+		 * 
+		 * 
+		 * try { latch.await(); } catch (InterruptedException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 * 
+		 * 
+		 * 
+		 * //Get Detected Points RequestQueue queue =
+		 * MyVolley.getRequestQueue();
+		 * 
+		 * JsonObjectRequest myReq = new JsonObjectRequest(Method.GET,
+		 * imageServerUri_getPoints+"?name="+fileUri.toString().substring(
+		 * fileUri.toString().indexOf("IMG")), null,
+		 * createMyReqSuccessListener2(), createMyReqErrorListener2());
+		 * 
+		 * queue.add(myReq);
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * // Get a detected photo from server //
+		 * MyVolley.init(FaceRecognition.this);
+		 * 
+		 * ImageLoader imageLoader = MyVolley.getImageLoader();
+		 * 
+		 * imageLoader.get(imageServerUri_getD + "?name=" + fileUri.toString(),
+		 * new ImageListener(){
+		 * 
+		 * @Override public void onErrorResponse(VolleyError error) { //if
+		 * (errorImageResId != 0) { //
+		 * imageView.setImageResource(errorImageResId); //}
+		 * Toast.makeText(FaceRecognition.this, "No Face Detected!!!",
+		 * Toast.LENGTH_LONG).show(); }
+		 * 
+		 * @Override public void onResponse(ImageContainer response, boolean
+		 * isImmediate) { if (response.getBitmap() != null) {
+		 * imageView.setImageBitmap(response.getBitmap()); } else if
+		 * (R.drawable.blank_photo != 0) {
+		 * imageView.setImageResource(R.drawable.blank_photo); } } } );
+		 * 
+		 * 
+		 * 
+		 * 
+		 * //Draw cropped Face image imageLoader.get(imageServerUri_getCrop +
+		 * "?name=" + fileUri.toString(), ImageLoader
+		 * .getImageListener(imageView2, R.drawable.no_image,
+		 * R.drawable.blank_photo)); //Draw meshed Face image
+		 * imageLoader.get(imageServerUri_getCrop + "?name=" +
+		 * fileUri.toString(), ImageLoader .getImageListener(imageView3,
+		 * R.drawable.no_image, R.drawable.blank_photo)); }
+		 * 
+		 * } });
+		 * 
+		 * // Recognize Button Button btnRecog = (Button)
+		 * findViewById(R.id.button_recog); btnRecog.setOnClickListener(new
+		 * OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { // TODO: Apply Face Detection
+		 * // Create a new image bitmap and attach a brand new canvas to it
+		 * 
+		 * // TODO: check if the Bitmap exists if (bitmap == null) { Context
+		 * context = getApplicationContext(); CharSequence text =
+		 * "Please Detect Face!"; int duration = Toast.LENGTH_SHORT;
+		 * 
+		 * Toast toast = Toast.makeText(context, text, duration); toast.show();
+		 * 
+		 * } else { // Show Matched Faces from Server on the Image List if
+		 * (!mHasData && !mInError) { loadPage(); } } } });
+		 * 
+		 * // Take photo button Button btn = (Button)
+		 * findViewById(R.id.button_take); btn.setOnClickListener(new
+		 * OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { Intent galleryintent = new
+		 * Intent(Intent.ACTION_GET_CONTENT, null);
+		 * galleryintent.setType("image/*");
+		 * 
+		 * // This can work as well // Intent galleryintent = new
+		 * Intent(Intent.ACTION_PICK, //
+		 * android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		 * 
+		 * Intent cameraIntent = new Intent(
+		 * android.provider.MediaStore.ACTION_IMAGE_CAPTURE); fileUri =
+		 * getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a // file to //
+		 * save the // image Log.i("fileUri", fileUri.toString());
+		 * cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set //
+		 * the // image // file // name cameraIntent.putExtra("return-data",
+		 * true);
+		 * 
+		 * Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+		 * chooser.putExtra(Intent.EXTRA_INTENT, galleryintent);
+		 * chooser.putExtra(Intent.EXTRA_TITLE, "Select Source");
+		 * 
+		 * Intent[] intentArray = { cameraIntent };
+		 * chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+		 * startActivityForResult(chooser, IMAGE_SELECTOR);
+		 * 
+		 * } });
+		 */
 	}
 
-
-	
-	//Detect face: response to the button in popupmenu
-	private void detectFace(){
-		if (bitmap == null) { //Check if there is an image
+	// Detect face: response to the button in popupmenu
+	private void detectFace() {
+		if (bitmap == null) { // Check if there is an image
 			Context context = getApplicationContext();
 			CharSequence text = "Please Take a Photo";
 			int duration = Toast.LENGTH_SHORT;
@@ -472,9 +448,9 @@ public class FaceRecognition extends Activity {
 			new UploadImageTask().execute();
 		}
 	}
-	
-	//RecognizeFace: response to the button in popupmenu
-	private void recognizeFace(){
+
+	// RecognizeFace: response to the button in popupmenu
+	private void recognizeFace() {
 		if (bitmap == null) {
 			Context context = getApplicationContext();
 			CharSequence text = "Please Detect Face!";
@@ -490,11 +466,10 @@ public class FaceRecognition extends Activity {
 			}
 		}
 	}
-	
-	//Take Photo: response to the button in popupmenu
-	private void takePhoto(){
-		Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT,
-				null);
+
+	// Take Photo: response to the button in popupmenu
+	private void takePhoto() {
+		Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT, null);
 		galleryintent.setType("image/*");
 
 		// This can work as well
@@ -524,71 +499,96 @@ public class FaceRecognition extends Activity {
 		startActivityForResult(chooser, IMAGE_SELECTOR);
 
 	}
-	
-	//Comput BMI: response to the button in popupmenu
-	private void computeBMI(){
-		Toast.makeText(getApplicationContext(), "Comput BMI", Toast.LENGTH_SHORT).show();
+
+	// Comput BMI: response to the button in popupmenu
+	private void computeBMI() {
+		Toast.makeText(getApplicationContext(), "Comput BMI",
+				Toast.LENGTH_SHORT).show();
+
+		String uri = imageServerUri_getBMI
+				+ "?name="
+				+ fileUri.toString().substring(
+						fileUri.toString().indexOf("IMG"));
+		Log.i("bmi uri:",uri);
+		// Get BMI result
+		RequestQueue queue = MyVolley.getRequestQueue();
+
+		JsonObjectRequest myReq = new JsonObjectRequest(Method.GET, uri, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						// TODO Auto-generated method stub
+						try {
+							textView_bmi.setText(response.getString("bmi").toString());
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						// TODO Auto-generated method stub
+						Log.i("bmierror",error.toString());
+						textView_bmi.setText("N/A");
+					}
+				});
+		queue.add(myReq);
 	}
-	
-	
-	
-	class UploadImageTask extends AsyncTask<Integer,Integer,Bitmap>{
-			
+
+	class UploadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
+
 		@Override
 		protected void onPostExecute(Bitmap result) {
 			// TODO Auto-generated method stub
 			mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-			
-			//Draw points and images
-			
-			//Draw Rectangle and display on image view 3
-			try{
-				JSONArray rect_arr = (JSONArray)detectJSONObj.get("rectangle");
+
+			// Draw points and images
+
+			// Draw Rectangle and display on image view 3
+			try {
+				JSONArray rect_arr = (JSONArray) detectJSONObj.get("rectangle");
 				JSONObject rect = rect_arr.getJSONObject(0);
 				int x = rect.getInt("x");
 				int y = rect.getInt("y");
 				int w = rect.getInt("w");
 				int h = rect.getInt("h");
-				Bitmap cropBitmap = Bitmap.createBitmap(bitmap, x, y,
-					w, h);
+				Bitmap cropBitmap = Bitmap.createBitmap(bitmap, x, y, w, h);
 				Bitmap sizeBitmap = Bitmap.createScaledBitmap(cropBitmap,
-					imageView3.getWidth(), imageView3.getHeight(), true);
-				imageView3.setImageBitmap(sizeBitmap);				
-			}catch(JSONException e){
-				Log.e(TAG,"json draw rectangle error.");
+						imageView3.getWidth(), imageView3.getHeight(), true);
+				imageView3.setImageBitmap(sizeBitmap);
+			} catch (JSONException e) {
+				Log.e(TAG, "json draw rectangle error.");
 			}
-			
-			//Draw Points and display on main image view
-			try{
-				JSONArray rect_arr = (JSONArray)detectJSONObj.get("points");
-				
-				Bitmap pointBitmap = bitmap.copy(Bitmap.Config.ARGB_8888,true);
+
+			// Draw Points and display on main image view
+			try {
+				JSONArray rect_arr = (JSONArray) detectJSONObj.get("points");
+
+				Bitmap pointBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 				Canvas canvas = new Canvas(pointBitmap);
 				Paint paint = new Paint();
 				paint.setColor(Color.GREEN);
 				paint.setStyle(Paint.Style.FILL);
 				paint.setStrokeWidth(3);
-				for (int i=0;i<rect_arr.length();i++){
+				for (int i = 0; i < rect_arr.length(); i++) {
 					JSONArray point = rect_arr.getJSONArray(i);
 					canvas.drawPoint(point.getInt(1), point.getInt(0), paint);
 				}
-				
+
 				imageView.setImageBitmap(pointBitmap);
-				
-				
-				
-			}catch(JSONException e){
-				Log.e(TAG,"json draw points error.");
+
+			} catch (JSONException e) {
+				Log.e(TAG, "json draw points error.");
 			}
 
-			
 		}
 
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			mProgressBar.setVisibility(ProgressBar.VISIBLE);
-			
+
 			dialog = ProgressDialog.show(FaceRecognition.this, "",
 					"Uploading file...", true);
 
@@ -605,26 +605,24 @@ public class FaceRecognition extends Activity {
 			// TODO Auto-generated method stub
 			uploadFile(fileUri.toString().substring(
 					fileUri.toString().indexOf("IMG")));
-						
-			/*for (int i=1;i<11;i++){
-				sleep();
-				publishProgress(i*10);
-			}*/
-			
+
+			/*
+			 * for (int i=1;i<11;i++){ sleep(); publishProgress(i*10); }
+			 */
+
 			return null;
 		}
-		
-		private void sleep(){
-			try{
+
+		private void sleep() {
+			try {
 				Thread.sleep(mDelay);
-			}catch (InterruptedException e){
+			} catch (InterruptedException e) {
 				Log.e(TAG, e.toString());
 			}
 		}
-		
+
 	}
-	
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == IMAGE_SELECTOR && resultCode == Activity.RESULT_OK) {
@@ -863,31 +861,33 @@ public class FaceRecognition extends Activity {
 						+ serverResponseMessage + ": " + serverResponseCode);
 
 				if (serverResponseCode == 200) {
-					//Get Response
+					// Get Response
 					InputStream is = conn.getInputStream();
-					BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+					BufferedReader rd = new BufferedReader(
+							new InputStreamReader(is));
 					String line;
 					StringBuffer response = new StringBuffer();
-					while((line=rd.readLine())!=null){
+					while ((line = rd.readLine()) != null) {
 						response.append(line);
 					}
 					jsonReply = response.toString();
 					rd.close();
-					
-					try{
+
+					try {
 						detectJSONObj = new JSONObject(jsonReply);
-						Log.i(TAG,detectJSONObj.toString());
-					}catch(Throwable t){
-						Log.e(TAG,"Could NOT parch JSON: \""+jsonReply+"\"");
+						Log.i(TAG, detectJSONObj.toString());
+					} catch (Throwable t) {
+						Log.e(TAG, "Could NOT parch JSON: \"" + jsonReply
+								+ "\"");
 					}
-					
 
 					runOnUiThread(new Runnable() {
 						public void run() {
 							Toast.makeText(FaceRecognition.this,
 									"File Upload Complete.", Toast.LENGTH_SHORT)
 									.show();
-							//Toast.makeText(getApplicationContext(), jsonReply, Toast.LENGTH_LONG).show();
+							// Toast.makeText(getApplicationContext(),
+							// jsonReply, Toast.LENGTH_LONG).show();
 						}
 					});
 
@@ -1145,58 +1145,55 @@ public class FaceRecognition extends Activity {
 		b.setMessage("Error occured");
 		b.show();
 	}
-	
-	
-	//load photo when click the small face image view(big, crop and meshed)
+
+	// load photo when click the small face image view(big, crop and meshed)
 	private void loadPhoto(ImageView imageView, int width, int height) {
 
-        ImageView tempImageView = imageView;
+		ImageView tempImageView = imageView;
 
+		AlertDialog.Builder imageDialog = new AlertDialog.Builder(this);
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        AlertDialog.Builder imageDialog = new AlertDialog.Builder(this);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.custom_fullimage_dialog,
+				(ViewGroup) findViewById(R.id.layout_root));
+		ImageView image = (ImageView) layout.findViewById(R.id.fullimage);
+		image.setImageDrawable(tempImageView.getDrawable());
+		imageDialog.setView(layout);
+		imageDialog.setPositiveButton("OK",
+				new DialogInterface.OnClickListener() {
 
-        View layout = inflater.inflate(R.layout.custom_fullimage_dialog,
-                (ViewGroup) findViewById(R.id.layout_root));
-        ImageView image = (ImageView) layout.findViewById(R.id.fullimage);
-        image.setImageDrawable(tempImageView.getDrawable());
-        imageDialog.setView(layout);
-        imageDialog.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
 
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+				});
 
-        });
+		imageDialog.create();
+		imageDialog.show();
+	}
 
-
-        imageDialog.create();
-        imageDialog.show();     
-    }
-
-	
-	
 	private Response.Listener<JSONObject> createMyReqSuccessListener2() {
-        return new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    textView_Res.setText(response.getString("size")+response.getString("points"));
-                } catch (JSONException e) {
-                    textView_Res.setText("Parse error");
-                }
-            }
-        };
-    }
-    
-    
-    private Response.ErrorListener createMyReqErrorListener2() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                textView_Res.setText(error.getMessage());
-                Log.i("json error",error.getMessage());
-            }
-        };
-    }
+		return new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				try {
+					textView_Res.setText(response.getString("size")
+							+ response.getString("points"));
+				} catch (JSONException e) {
+					textView_Res.setText("Parse error");
+				}
+			}
+		};
+	}
+
+	private Response.ErrorListener createMyReqErrorListener2() {
+		return new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				textView_Res.setText(error.getMessage());
+				Log.i("json error", error.getMessage());
+			}
+		};
+	}
 }
