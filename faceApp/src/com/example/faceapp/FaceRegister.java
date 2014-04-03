@@ -1,10 +1,12 @@
 package com.example.faceapp;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,11 +44,14 @@ public class FaceRegister extends Activity {
 	private String name = "";
 	private String gender = "male";
 	private String race = "Asian";
-	private int age = 0;
+	private int age = 25;
 	private Bitmap bitmap;
 	private ImageView imageView;
 
 	private Uri fileUri;
+	private static final String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
+	private static final String uoploadUri = SERVER_IP_ADDRESS
+			+ "face_register.php";
 	private static final int IMAGE_SELECTOR = 1;
 
 	@Override
@@ -57,7 +63,7 @@ public class FaceRegister extends Activity {
 		final EditText textView_name = (EditText) findViewById(R.id.editText_name);
 
 		// get Age
-		NumberPicker numberPicker = (NumberPicker) findViewById(R.id.numberpicker);
+		final NumberPicker numberPicker = (NumberPicker) findViewById(R.id.numberpicker);
 		numberPicker.setMaxValue(200);
 		numberPicker.setMinValue(1);
 		numberPicker.setValue(25);
@@ -153,11 +159,112 @@ public class FaceRegister extends Activity {
 					Toast.makeText(getApplicationContext(),
 							name + gender.toString() + age, Toast.LENGTH_LONG)
 							.show();
+					
+					uploadEntry();
 				}
+			}
+		});
+		
+		
+		
+		// Button reset
+		final Button button_reset = (Button) findViewById(R.id.button_reset);
+		button_reset.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				textView_name.setText("");
+				
+				numberPicker.setValue(25);
+				
+				rButton_asian.setChecked(true);
+				rButton_black.setChecked(false);
+				rButton_white.setChecked(false);
+				
+				rButton_male.setChecked(true);
+				rButton_female.setChecked(false);
+				
+				imageView.setImageResource(R.drawable.blank_photo);
+				
+				
+				bitmap=null;
 			}
 		});
 
 	}
+	
+	
+	//upload infomation to server
+	private void uploadEntry(){
+		//Create the jsonobject
+		HashMap<String,String> params = new HashMap<String,String>();
+		
+		params.put("name", name);
+		params.put("gender", gender);
+		params.put("race", race);
+		params.put("age", Integer.toString(age));
+		
+		//Converting Image(bitmap) to String
+		String encodedImage="";
+		if (bitmap!=null){
+			encodedImage = getStringFromBitmap(bitmap);
+		}
+		//put image
+		params.put("image",encodedImage);
+		//Create json object
+		JSONObject jsonObj = new JSONObject(params);
+		//Log.i("jsonobj",jsonObj.toString());
+		Log.i("name",name);
+		Log.i("gender", gender);
+		Log.i("race", race);
+		Log.i("age", Integer.toString(age));
+		
+		
+		//Use Volley to upload
+		RequestQueue queue = MyVolley.getRequestQueue();
+		JsonObjectRequest myReq = new JsonObjectRequest(Method.POST, uoploadUri, jsonObj,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						// TODO Auto-generated method stub
+						try {
+							Log.i("regiser Response: ", response.toString());
+							Toast.makeText(getApplicationContext(), "Face Registrition "+response.getString("res").toString(), Toast.LENGTH_LONG).show();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						// TODO Auto-generated method stub
+						Log.i("face register error",error.toString());
+					}
+				});
+		queue.add(myReq);
+		
+	}
+	
+	//Converting bitmap to json string
+	private String getStringFromBitmap(Bitmap bitmapPicture){
+		final int COMPRESSION_QUILITY=100;
+		String encodedImage="";
+		ByteArrayOutputStream byteArrayBitmapStream= new ByteArrayOutputStream();
+		bitmapPicture.compress(Bitmap.CompressFormat.JPEG,COMPRESSION_QUILITY, byteArrayBitmapStream);
+		byte[] b = byteArrayBitmapStream.toByteArray();
+		encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+		return encodedImage;
+	}
+	
+	//Convertint json string to bitmap
+	private Bitmap getBitmapFromString(String jsonString){
+		byte[] decodedString = Base64.decode(jsonString, Base64.DEFAULT);
+		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);		
+		return decodedByte;
+	}
+	
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

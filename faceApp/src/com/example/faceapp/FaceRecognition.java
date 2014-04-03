@@ -220,10 +220,8 @@ public class FaceRecognition extends Activity {
 
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-		
 		loadPage();
-		
-		
+
 		// this.imageView3 = (ImageView) this.findViewById(R.id.imageView3);
 		// imageView3.setBackgroundResource(R.drawable.imageborder);
 
@@ -247,8 +245,8 @@ public class FaceRecognition extends Activity {
 				MatchedFace mf = (MatchedFace) parent.getAdapter().getItem(
 						position);
 				String item = mf.getTitle();
-				Toast.makeText(getBaseContext(), item, Toast.LENGTH_SHORT)
-						.show();
+				// Toast.makeText(getBaseContext(), item,
+				// Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent(FaceRecognition.this,
 						FaceDetail.class);
 				intent.putExtra("face_title", mf.getTitle());
@@ -509,7 +507,7 @@ public class FaceRecognition extends Activity {
 				+ "?name="
 				+ fileUri.toString().substring(
 						fileUri.toString().indexOf("IMG"));
-		Log.i("bmi uri:",uri);
+		Log.i("bmi uri:", uri);
 		// Get BMI result
 		RequestQueue queue = MyVolley.getRequestQueue();
 
@@ -519,7 +517,8 @@ public class FaceRecognition extends Activity {
 					public void onResponse(JSONObject response) {
 						// TODO Auto-generated method stub
 						try {
-							textView_bmi.setText(response.getString("bmi").toString());
+							textView_bmi.setText(response.getString("bmi")
+									.toString());
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -529,7 +528,7 @@ public class FaceRecognition extends Activity {
 					@Override
 					public void onErrorResponse(VolleyError error) {
 						// TODO Auto-generated method stub
-						Log.i("bmierror",error.toString());
+						Log.i("bmierror", error.toString());
 						textView_bmi.setText("N/A");
 					}
 				});

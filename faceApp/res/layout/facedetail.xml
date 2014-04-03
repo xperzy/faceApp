@@ -1,32 +1,168 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    
-	 <FrameLayout
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView_name_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-Name:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textView_name_val_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/Button_Blue" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             >
+
+            <TextView
+                android:id="@+id/textView_photo_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-Photo:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <ImageView
+                android:id="@+id/imageView_photo_d"
+                android:layout_width="150dip"
+                android:layout_height="150dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/blank_photo" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView_gender_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="-Gender:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checkedButton="@+id/radioButton_male_d"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioButton_male_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male" />
+
+            <RadioButton
+                android:id="@+id/radioButton_female_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Female" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView_age_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-Age:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textView_age_val_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Button_Blue"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView_race_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-Ethnicity:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checkedButton="@+id/radioButton_asian_d"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioButton_asian_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Asian" />
+
+            <RadioButton
+                android:id="@+id/radioButton_black_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Black" />
+
+            <RadioButton
+                android:id="@+id/radioButton_white_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="White" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:id="@+id/FrameView_detail" >
+        android:text="-Description:"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <ImageView
-            android:id="@+id/imageView_faceD"
-            android:layout_width="220dip"
-            android:layout_height="320dip"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/no_image" />
+    <TextView
+        android:id="@+id/textView_description_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/Button_Blue" />
 
-    </FrameLayout>
-
-	 <TextView
-	     android:id="@+id/textView_name"
-	     android:layout_width="wrap_content"
-	     android:layout_height="wrap_content"
-	     android:text="No info"
-	     android:textAppearance="?android:attr/textAppearanceLarge" />
-    
 </LinearLayout>
