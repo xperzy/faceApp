@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="220dip"
-            android:layout_height="320dip"
+            android:layout_width="320dip"
+            android:layout_height="480dip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:scaleType="fitXY"
@@ -22,8 +22,8 @@
 
         <ImageView
             android:id="@+id/imageView_point"
-            android:layout_width="220dip"
-            android:layout_height="320dip"
+            android:layout_width="320dip"
+            android:layout_height="480dip"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:scaleType="fitXY" />
@@ -44,16 +44,16 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="110dip"
-            android:layout_height="110dip"
+            android:layout_width="160dip"
+            android:layout_height="160dip"
             android:scaleType="fitXY"
             android:src="@drawable/facial_b" />
     </FrameLayout>
 
     <ImageView
         android:id="@+id/imageView_3"
-        android:layout_width="110dip"
-        android:layout_height="110dip"
+        android:layout_width="160dip"
+        android:layout_height="160dip"
         android:layout_below="@+id/FrameView1"
         android:layout_toLeftOf="@+id/listView1"
         android:scaleType="fitXY"
@@ -84,8 +84,8 @@
 
     <TextView
         android:id="@+id/textView_Res"
-        android:layout_width="120dip"
-        android:layout_height="50dip"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_above="@+id/button_popup"
         android:layout_alignLeft="@+id/listView1"
         android:layout_alignParentRight="true"
@@ -107,84 +107,8 @@
         android:textSize="15dp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView_gender_lab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_pred_label"
-        android:layout_marginTop="11dp"
-        android:layout_toRightOf="@+id/imageView_3"
-        android:text="-Gender:"
-        android:textColor="@color/colorlist" />
-
-    <TextView
-        android:id="@+id/textView_age_lab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView_bmi_lab"
-        android:layout_below="@+id/textView_gender_lab"
-        android:layout_marginTop="11dp"
-        android:text="-Age:"
-        android:textColor="@color/colorlist" />
-
-    <TextView
-        android:id="@+id/textView_race_lab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView_3"
-        android:layout_alignLeft="@+id/textView_age_lab"
-        android:text="-Ethnicity:"
-        android:textColor="@color/colorlist" />
-
-    <TextView
-        android:id="@+id/textView_bmi_lab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView_Res"
-        android:layout_alignLeft="@+id/textView_Res"
-        android:layout_marginBottom="10dp"
-        android:text="-BMI:"
-        android:textColor="@color/colorlist" />
-
-    <TextView
-        android:id="@+id/textView_bmi_val"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_bmi_lab"
-        android:layout_alignBottom="@+id/textView_bmi_lab"
-        android:layout_alignLeft="@+id/textView_race_val"
-        android:text="N/A"
-        android:textColor="@color/YellowGreen" />
-
-    <TextView
-        android:id="@+id/textView_race_val"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_race_lab"
-        android:layout_alignBottom="@+id/textView_race_lab"
-        android:layout_toRightOf="@+id/textView_race_lab"
-        android:text="N/A  0.00%"
-        android:textColor="@color/YellowGreen" />
-
-    <TextView
-        android:id="@+id/textView_age_val"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_age_lab"
-        android:layout_alignBottom="@+id/textView_age_lab"
-        android:layout_alignLeft="@+id/textView_race_val"
-        android:text="N/A  0.00%"
-        android:textColor="@color/YellowGreen" />
-
-    <TextView
-        android:id="@+id/textView_gender_val"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView_age_lab"
-        android:layout_alignLeft="@+id/textView_age_val"
-        android:text="N/A  0.00%"
-        android:textColor="@color/YellowGreen" />
-
+   
+   
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -194,7 +118,6 @@
         android:layout_marginLeft="19dp"
         android:layout_marginTop="16dp"
         android:orientation="vertical" >
-
     </LinearLayout>
 
     <TextView
@@ -204,7 +127,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/FrameView2"
         android:text="Instructions:"
-        android:textColor="@color/White" />
+        android:textColor="@color/White"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/textView_gender_val"
@@ -212,34 +136,119 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="4.Compute BMI"
-        android:textColor="@color/White" />
+        android:text=" 1.Take a photo \n 2.Upload and Detect face \n 3.Recognize ID, Age, Gender \n 4.Compute BMI"
+        android:textColor="@color/White"
+        android:textSize="25sp" />
 
-    <TextView
-        android:id="@+id/textView_gender_val"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/linearLayout1"
-        android:text="3.Recognize ID, Age, Gender"
-        android:textColor="@color/White" />
+        android:layout_alignBottom="@+id/textView_Res"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView_pred_label"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView_gender_val"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView_Res"
-        android:text="2.Upload and Detect face"
-        android:textColor="@color/White" />
+        <LinearLayout
+            android:layout_width="277dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp" >
 
-    <TextView
-        android:id="@+id/textView_gender_val"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
-        android:layout_alignParentLeft="true"
-        android:text="1.Take a photo"
-        android:textColor="@color/White" />
+            <TextView
+                android:id="@+id/textView_gender_lab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                
+                android:text="-Gender:"
+                android:textColor="@color/colorlist"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView_gender_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                
+                android:text="N/A  0.00%"
+                android:textColor="@color/YellowGreen"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="277dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/textView_age_lab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                
+                android:text="-Age:"
+                android:textColor="@color/colorlist"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView_age_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                
+                android:text="N/A  0.00%"
+                android:textColor="@color/YellowGreen"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="277dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/textView_race_lab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                
+                android:text="-Ethnicity:"
+                android:textColor="@color/colorlist"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView_race_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                
+                android:text="N/A  0.00%"
+                android:textColor="@color/YellowGreen"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="277dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/textView_bmi_lab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:text="-BMI:"
+                android:textColor="@color/colorlist"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView_bmi_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N/A  "
+                android:textColor="@color/YellowGreen"
+                android:textSize="25sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

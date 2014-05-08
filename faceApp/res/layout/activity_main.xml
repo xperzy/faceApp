@@ -43,8 +43,9 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="16dp"
-        android:text="Version 0.1"
-        android:textColor="@color/White" />
+        android:text="Version 0.8"
+        android:textColor="@color/White"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -67,6 +68,7 @@
         android:background="@color/Button_Blue"
         android:gravity="left|center_vertical"
         android:text="    Exit"
+        android:textSize="20sp"
         android:textColor="@color/colorlist" />
 
     <Button
@@ -102,6 +104,21 @@
         android:layout_alignParentTop="true"
         android:text="West Virginia University"
         android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-        android:textColor="@color/AliceBlue" />
+        android:textColor="@color/AliceBlue"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_below="@+id/button4"
+        android:layout_marginTop="143dp"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="    SetIP"
+        android:textColor="@color/colorlist"
+        android:textSize="20sp" />
 
 </RelativeLayout>

@@ -22,10 +22,12 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="setIP" >
         <activity
             android:name="com.example.faceapp.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +37,8 @@
         
         <activity
             android:name="com.example.faceapp.AgeEstimation"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +49,8 @@
         <activity
             android:name="com.example.faceapp.FaceRecognition"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,7 +61,8 @@
         
         <activity
             android:name="com.example.faceapp.FaceRegister"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,7 +73,8 @@
         
         <activity
             android:name="com.example.faceapp.FaceDetail"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

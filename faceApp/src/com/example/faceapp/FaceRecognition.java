@@ -108,7 +108,7 @@ public class FaceRecognition extends Activity {
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
 	// private static final String SERVER_IP_ADDRESS = "http://157.182.38.37/";
-	private static final String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
+	private static String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
 	private static final String imageServerUri_load = SERVER_IP_ADDRESS
 			+ "load_list.php"; // "http://157.182.38.37/welcome.php";
 	private static final String imageServerUri_getD = SERVER_IP_ADDRESS
@@ -146,6 +146,9 @@ public class FaceRecognition extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recog);
 
+		SERVER_IP_ADDRESS = "http://"+((setIP)this.getApplication()).getServerIP()+"/php/";
+		Toast.makeText(getApplicationContext(), "Server IP: "+ SERVER_IP_ADDRESS, Toast.LENGTH_LONG).show();
+		
 		/************* Php script path ****************/
 		// upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
 
@@ -647,7 +650,8 @@ public class FaceRecognition extends Activity {
 					bitmap = BitmapFactory.decodeStream(getContentResolver()
 							.openInputStream(fileUri));
 					Matrix matrix = new Matrix();
-					matrix.postRotate((float) 90.0);
+					//matrix.postRotate((float) 90.0);
+					matrix.postRotate((float) 0.0);
 					Bitmap rotaBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 							bitmap.getWidth(), bitmap.getHeight(), matrix,
 							false);
