@@ -27,7 +27,7 @@
         <activity
             android:name="com.example.faceapp.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" >           
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,48 +39,28 @@
             android:name="com.example.faceapp.AgeEstimation"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+                    </activity>
         
         <activity
             android:name="com.example.faceapp.FaceRecognition"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+                    </activity>
         
         
         <activity
             android:name="com.example.faceapp.FaceRegister"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+                    </activity>
         
         
         <activity
             android:name="com.example.faceapp.FaceDetail"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+                    </activity>
         
     </application>
     
