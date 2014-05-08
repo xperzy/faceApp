@@ -467,6 +467,11 @@ public class FaceRecognition extends Activity {
 
 	// Take Photo: response to the button in popupmenu
 	private void takePhoto() {
+		
+		imageView3.setImageResource(R.drawable.face_a);
+		imageView2.setImageResource(R.drawable.facial_b);
+		
+		
 		Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT, null);
 		galleryintent.setType("image/*");
 
@@ -495,7 +500,6 @@ public class FaceRecognition extends Activity {
 		Intent[] intentArray = { cameraIntent };
 		chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
 		startActivityForResult(chooser, IMAGE_SELECTOR);
-
 	}
 
 	// Comput BMI: response to the button in popupmenu
@@ -566,16 +570,29 @@ public class FaceRecognition extends Activity {
 
 				Bitmap pointBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 				Canvas canvas = new Canvas(pointBitmap);
+				
+				Bitmap bmp = Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(),Bitmap.Config.ARGB_8888);
+				Canvas canvas2 = new Canvas(bmp);
+				canvas2.drawColor(Color.DKGRAY);
 				Paint paint = new Paint();
 				paint.setColor(Color.GREEN);
+				paint.setTextSize(12);
 				paint.setStyle(Paint.Style.FILL);
 				paint.setStrokeWidth(3);
 				for (int i = 0; i < rect_arr.length(); i++) {
 					JSONArray point = rect_arr.getJSONArray(i);
 					canvas.drawPoint(point.getInt(1), point.getInt(0), paint);
+					canvas2.drawPoint(point.getInt(1), point.getInt(0), paint);
+					canvas2.drawText(Integer.toString(i), point.getInt(1), point.getInt(0), paint);
 				}
 
 				imageView.setImageBitmap(pointBitmap);
+				
+				
+				Bitmap sizeBitmap = Bitmap.createScaledBitmap(bmp,
+						imageView2.getWidth(), imageView2.getHeight(), true);
+				imageView2.setImageBitmap(sizeBitmap);
+				
 
 			} catch (JSONException e) {
 				Log.e(TAG, "json draw points error.");
@@ -662,6 +679,7 @@ public class FaceRecognition extends Activity {
 
 			}
 
+					
 			super.onActivityResult(requestCode, resultCode, data);
 		}
 
