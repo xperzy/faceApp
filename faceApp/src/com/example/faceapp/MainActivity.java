@@ -3,12 +3,13 @@ package com.example.faceapp;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -47,13 +48,13 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		// Age Button
-		Button btnAge = (Button) findViewById(R.id.button3);
+		// About Button
+		Button btnAge = (Button) findViewById(R.id.button6);
 		btnAge.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this,
-						AgeEstimation.class);
+						AboutApp.class);
 				startActivity(intent);
 			}
 		});
@@ -86,8 +87,16 @@ public class MainActivity extends Activity {
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog, int which) {
-								Toast.makeText(getApplicationContext(), userInput.getText(), Toast.LENGTH_SHORT).show();
-								((setIP)MainActivity.this.getApplication()).setServerIP(userInput.getText().toString());
+																
+								SharedPreferences sp = getSharedPreferences("preferences",Context.MODE_PRIVATE);
+								Editor editor = sp.edit();
+								editor.putString("serverIP", userInput.getText().toString());
+								if (editor.commit()){
+									Toast.makeText(getApplicationContext(), userInput.getText().toString()+"Set saved.", Toast.LENGTH_SHORT).show();
+								}else{
+									Toast.makeText(getApplicationContext(), userInput.getText().toString()+"Set Falied.", Toast.LENGTH_SHORT).show();
+								}
+																
 								dialog.dismiss();
 							}
 

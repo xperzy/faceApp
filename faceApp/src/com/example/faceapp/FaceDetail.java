@@ -14,7 +14,7 @@ public class FaceDetail extends Activity {
 	ImageView imageView;
 	TextView textView_name;
 	TextView textView_age;
-	String imageServerUri_getDetail = "http://157.182.38.37/getDetail.php";
+	String imageServerUri_getDetail = "http://192.168.43.222/getDetail.php";
 	
 	
 	@Override

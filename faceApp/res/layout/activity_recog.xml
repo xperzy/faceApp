@@ -32,7 +32,7 @@
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
-        android:layout_height="320dip"
+        android:layout_height="fill_parent"
         android:layout_toRightOf="@+id/FrameView1" />
 
     <FrameLayout

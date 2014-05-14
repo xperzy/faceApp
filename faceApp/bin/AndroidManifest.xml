@@ -7,62 +7,56 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="18" />
-    
-    
-	 <uses-feature android:name="android.hardware.camera"
-                  android:required="true" />
-	 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	 <uses-permission android:name="android.permission.CAMERA" />
-	 <uses-permission android:name="android.permission.INTERNET"/>
-	 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	 <uses-permission android:name="android.permission.WRITE_OWNER_DATA"/>
-	 <uses-permission android:name="android.permission.READ_OWNER_DATA"/>
-	 
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
+    <uses-permission android:name="android.permission.READ_OWNER_DATA" />
+
     <application
+        android:name="setIP"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/lab"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="setIP" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.faceapp.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >           
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
-            android:name="com.example.faceapp.AgeEstimation"
+            android:name="com.example.faceapp.AboutApp"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-                    </activity>
-        
+        </activity>
         <activity
             android:name="com.example.faceapp.FaceRecognition"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" >
-                    </activity>
-        
-        
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
         <activity
             android:name="com.example.faceapp.FaceRegister"
             android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" >
-                    </activity>
-        
-        
+        </activity>
         <activity
             android:name="com.example.faceapp.FaceDetail"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-                    </activity>
-        
+        </activity>
     </application>
-    
 
 </manifest>

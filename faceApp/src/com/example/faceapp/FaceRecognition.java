@@ -42,6 +42,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -108,18 +109,25 @@ public class FaceRecognition extends Activity {
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
 	// private static final String SERVER_IP_ADDRESS = "http://157.182.38.37/";
-	private static String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
-	private static final String imageServerUri_load = SERVER_IP_ADDRESS
+	
+	//2014/05 nexus7
+	//private static String SERVER_IP_ADDRESS = "http://192.168.43.222/php/";
+	//try set ip
+	SharedPreferences sp = getSharedPreferences("preferences",Context.MODE_PRIVATE);
+	private String SERVER_IP_ADDRESS = "http://"+sp.getString("serverIP","defName") +"/php/";
+	
+	
+	private final String imageServerUri_load = SERVER_IP_ADDRESS
 			+ "load_list.php"; // "http://157.182.38.37/welcome.php";
-	private static final String imageServerUri_getD = SERVER_IP_ADDRESS
+	private final String imageServerUri_getD = SERVER_IP_ADDRESS
 			+ "getDetected.php"; // "http://157.182.38.37/getDetected.php";
-	private static final String imageServerUri_getCrop = SERVER_IP_ADDRESS
+	private final String imageServerUri_getCrop = SERVER_IP_ADDRESS
 			+ "getCrop.php";// "http://157.182.38.37/getCrop.php";
-	private static final String imageServerUri_getMesh = SERVER_IP_ADDRESS
+	private final String imageServerUri_getMesh = SERVER_IP_ADDRESS
 			+ "getMesh.php";// "http://157.182.38.37/getMesh.php";
-	private static final String imageServerUri_getPoints = SERVER_IP_ADDRESS
+	private final String imageServerUri_getPoints = SERVER_IP_ADDRESS
 			+ "getPoints.php";
-	private static final String imageServerUri_getBMI = SERVER_IP_ADDRESS
+	private final String imageServerUri_getBMI = SERVER_IP_ADDRESS
 			+ "computeBMI.php";
 
 	private ListView mLvPicasa;
@@ -146,14 +154,16 @@ public class FaceRecognition extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recog);
 
-		SERVER_IP_ADDRESS = "http://"+((setIP)this.getApplication()).getServerIP()+"/php/";
-		Toast.makeText(getApplicationContext(), "Server IP: "+ SERVER_IP_ADDRESS, Toast.LENGTH_LONG).show();
-		
+		// SERVER_IP_ADDRESS =
+		// "http://"+((setIP)this.getApplication()).getServerIP()+"/php/";
+		// Toast.makeText(getApplicationContext(), "Server IP: "+
+		// SERVER_IP_ADDRESS, Toast.LENGTH_LONG).show();
+
 		/************* Php script path ****************/
 		// upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
 
 		// 3.20 test
-		upLoadServerUri = "http://157.182.38.24/php/upload_img_try.php";
+		//upLoadServerUri = "http://192.168.43.222/php/upload_img_try.php";
 
 		// imageServerUri = "http://157.182.38.37/uploads/4.jpg";
 
@@ -470,11 +480,10 @@ public class FaceRecognition extends Activity {
 
 	// Take Photo: response to the button in popupmenu
 	private void takePhoto() {
-		
+
 		imageView3.setImageResource(R.drawable.face_a);
 		imageView2.setImageResource(R.drawable.facial_b);
-		
-		
+
 		Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT, null);
 		galleryintent.setType("image/*");
 
@@ -552,55 +561,103 @@ public class FaceRecognition extends Activity {
 			// Draw points and images
 
 			// Draw Rectangle and display on image view 3
-			try {
-				JSONArray rect_arr = (JSONArray) detectJSONObj.get("rectangle");
-				JSONObject rect = rect_arr.getJSONObject(0);
-				int x = rect.getInt("x");
-				int y = rect.getInt("y");
-				int w = rect.getInt("w");
-				int h = rect.getInt("h");
-				Bitmap cropBitmap = Bitmap.createBitmap(bitmap, x, y, w, h);
-				Bitmap sizeBitmap = Bitmap.createScaledBitmap(cropBitmap,
-						imageView3.getWidth(), imageView3.getHeight(), true);
-				imageView3.setImageBitmap(sizeBitmap);
-			} catch (JSONException e) {
-				Log.e(TAG, "json draw rectangle error.");
-			}
-
-			// Draw Points and display on main image view
-			try {
-				JSONArray rect_arr = (JSONArray) detectJSONObj.get("points");
-
-				Bitmap pointBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-				Canvas canvas = new Canvas(pointBitmap);
-				
-				Bitmap bmp = Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(),Bitmap.Config.ARGB_8888);
-				Canvas canvas2 = new Canvas(bmp);
-				canvas2.drawColor(Color.DKGRAY);
-				Paint paint = new Paint();
-				paint.setColor(Color.GREEN);
-				paint.setTextSize(12);
-				paint.setStyle(Paint.Style.FILL);
-				paint.setStrokeWidth(3);
-				for (int i = 0; i < rect_arr.length(); i++) {
-					JSONArray point = rect_arr.getJSONArray(i);
-					canvas.drawPoint(point.getInt(1), point.getInt(0), paint);
-					canvas2.drawPoint(point.getInt(1), point.getInt(0), paint);
-					canvas2.drawText(Integer.toString(i), point.getInt(1), point.getInt(0), paint);
+			int x = 0;
+			int y = 0;
+			int w = 0;
+			int h = 0;
+			
+			
+			
+				try {
+					JSONArray rect_arr = (JSONArray) detectJSONObj
+							.get("rectangle");
+					
+					JSONObject rect = rect_arr.getJSONObject(0);
+					if (rect_arr.isNull(0)){
+						//Toast.makeText(getApplicationContext(), "No Face Detected!!! Please Select Another Image.", Toast.LENGTH_LONG).show();
+	new AlertDialog.Builder(FaceRecognition.this).setTitle("No Face Detected").setMessage("No Face Detected!!! Please Select Another Image.").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						}).setIcon(android.R.drawable.ic_dialog_alert).create().show();
+						
+					}else{
+						
+					
+					x = rect.getInt("x");
+					y = rect.getInt("y");
+					w = rect.getInt("w");
+					h = rect.getInt("h");
+					Bitmap cropBitmap = Bitmap.createBitmap(bitmap, x, y, w, h);
+					Bitmap sizeBitmap = Bitmap
+							.createScaledBitmap(cropBitmap,
+									imageView3.getWidth(),
+									imageView3.getHeight(), true);
+					imageView3.setImageBitmap(sizeBitmap);
+					}
+				} catch (JSONException e) {
+					Log.e(TAG, "json draw rectangle error.");
 				}
 
-				imageView.setImageBitmap(pointBitmap);
-				
-				
-				Bitmap sizeBitmap = Bitmap.createScaledBitmap(bmp,
-						imageView2.getWidth(), imageView2.getHeight(), true);
-				imageView2.setImageBitmap(sizeBitmap);
-				
+				// Draw Points and display on main image view
+				try {
+					JSONArray rect_arr = (JSONArray) detectJSONObj
+							.get("points");
+					
+					if (rect_arr.isNull(0)){
+						//Toast.makeText(getApplicationContext(), "No Face Detected!!! Please Select Another Image.", Toast.LENGTH_LONG).show();
+						
+						new AlertDialog.Builder(FaceRecognition.this).setTitle("No Face Detected").setMessage("No Face Detected!!! Please Select Another Image.").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						}).setIcon(android.R.drawable.ic_dialog_alert).create().show();
+						
+					}else{
+					
+					
+					Bitmap pointBitmap = bitmap.copy(Bitmap.Config.ARGB_8888,
+							true);
+					Canvas canvas = new Canvas(pointBitmap);
 
-			} catch (JSONException e) {
-				Log.e(TAG, "json draw points error.");
-			}
+					Bitmap bmp = Bitmap.createBitmap(bitmap.getWidth(),
+							bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+					Canvas canvas2 = new Canvas(bmp);
+					canvas2.drawColor(Color.DKGRAY);
+					Paint paint = new Paint();
+					paint.setColor(Color.GREEN);
+					paint.setTextSize(18);
+					paint.setStyle(Paint.Style.FILL);
+					paint.setStrokeWidth(8);
+					for (int i = 0; i < rect_arr.length(); i++) {
+						JSONArray point = rect_arr.getJSONArray(i);
+						canvas.drawPoint(point.getInt(1), point.getInt(0),
+								paint);
+						canvas2.drawPoint(point.getInt(1), point.getInt(0),
+								paint);
+						canvas2.drawText(Integer.toString(i), point.getInt(1),
+								point.getInt(0), paint);
+					}
 
+					imageView.setImageBitmap(pointBitmap);
+
+					Bitmap cropBitmap = Bitmap.createBitmap(bmp, x, y, w, h);
+					Bitmap sizeBitmap = Bitmap
+							.createScaledBitmap(cropBitmap,
+									imageView2.getWidth(),
+									imageView2.getHeight(), true);
+					imageView2.setImageBitmap(sizeBitmap);
+					}
+				} catch (JSONException e) {
+					Log.e(TAG, "json draw points error.");
+				}
+			
 		}
 
 		@Override
@@ -650,7 +707,7 @@ public class FaceRecognition extends Activity {
 					bitmap = BitmapFactory.decodeStream(getContentResolver()
 							.openInputStream(fileUri));
 					Matrix matrix = new Matrix();
-					//matrix.postRotate((float) 90.0);
+					// matrix.postRotate((float) 90.0);
 					matrix.postRotate((float) 0.0);
 					Bitmap rotaBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 							bitmap.getWidth(), bitmap.getHeight(), matrix,
@@ -683,7 +740,6 @@ public class FaceRecognition extends Activity {
 
 			}
 
-					
 			super.onActivityResult(requestCode, resultCode, data);
 		}
 
@@ -820,7 +876,7 @@ public class FaceRecognition extends Activity {
 			try {
 				// Convert bitmap to byte array
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				bitmap.compress(CompressFormat.PNG, 0, bos);
+				bitmap.compress(CompressFormat.JPEG, 0, bos);
 				byte[] bitmapdata = bos.toByteArray();
 
 				// write the bytes in file

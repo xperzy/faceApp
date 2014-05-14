@@ -20,21 +20,8 @@
         android:text="    Recognize Face Photo"
         android:gravity="left|center_vertical"
         android:background="@color/Button_Blue"
+        android:textSize="20sp"
         android:textColor="@color/colorlist" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button2"
-        android:layout_alignRight="@+id/button2"
-        android:layout_below="@+id/button2"
-        android:layout_marginTop="10dp"
-        android:text="    Estimate Age"
-        android:gravity="left|center_vertical"
-        android:background="@color/Button_Blue"
-        android:textColor="@color/colorlist"
-        />
 
     <TextView
         android:id="@+id/textView2"
@@ -45,31 +32,7 @@
         android:layout_marginTop="16dp"
         android:text="Version 0.8"
         android:textColor="@color/White"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/foot_note"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/White" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignRight="@+id/button3"
-        android:layout_below="@+id/button3"
-        android:layout_marginTop="11dp"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:text="    Exit"
-        android:textSize="20sp"
-        android:textColor="@color/colorlist" />
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/button1"
@@ -82,42 +45,101 @@
         android:background="@color/Button_Blue"
         android:gravity="left|center_vertical"
         android:text="    Register Face Photo"
+        android:textSize="20sp"
         android:textColor="@color/colorlist" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/textView3"
+        android:src="@drawable/lab2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="@string/foot_note"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/White" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="77dp"
-        android:text="Face Recognition Demo"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/imageView2"
+        android:layout_marginTop="87dp"
+        android:text="Facial Biometrics Demo"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/White"
+        android:textSize="35sp" />
+
+    <TextView
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_marginBottom="19dp"
+        android:layout_toLeftOf="@+id/imageView1"
+        android:text="West Virginia University"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/White"
         android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="West Virginia University"
-        android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-        android:textColor="@color/AliceBlue"
-        android:textSize="30sp" />
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="22dp"
+        android:src="@drawable/wvu2_tran" />
 
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignRight="@+id/textView3"
-        android:layout_below="@+id/button4"
-        android:layout_marginTop="143dp"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/imageView1"
         android:background="@color/Button_Blue"
         android:gravity="left|center_vertical"
-        android:text="    SetIP"
+        android:text="    Set Server IP Address"
+        android:textColor="@color/colorlist"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button5"
+        android:layout_alignRight="@+id/button5"
+        android:layout_below="@+id/button5"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:layout_marginTop="10dp"
+        android:text="    About this demo"
+        android:textColor="@color/colorlist"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button6"
+        android:layout_alignRight="@+id/button6"
+        android:layout_below="@+id/button6"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:layout_marginTop="10dp"
+        android:text="    Exit"
         android:textColor="@color/colorlist"
         android:textSize="20sp" />
 

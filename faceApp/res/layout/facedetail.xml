@@ -12,7 +12,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="120dp"
             android:orientation="vertical" >
 
             <TextView
@@ -20,6 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-Name:"
+                android:textSize="35sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -39,12 +40,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-Photo:"
+                android:textSize="35sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageView
                 android:id="@+id/imageView_photo_d"
-                android:layout_width="150dip"
-                android:layout_height="150dip"
+                android:layout_width="200dip"
+                android:layout_height="200dip"
                 android:scaleType="fitXY"
                 android:src="@drawable/blank_photo" />
         </LinearLayout>
@@ -63,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:text="-Gender:"
+            android:textSize="35sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <RadioGroup
@@ -76,13 +79,15 @@
                 android:id="@+id/radioButton_male_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Male" />
+                android:text="Male"
+                android:textSize="35sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_female_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Female" />
+                android:text="Female"
+                android:textSize="35sp" />
         </RadioGroup>
     </LinearLayout>
 
@@ -98,6 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-Age:"
+            android:textSize="35sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -120,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-Ethnicity:"
+            android:textSize="35sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <RadioGroup
@@ -133,19 +140,22 @@
                 android:id="@+id/radioButton_asian_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Asian" />
+                android:text="Asian"
+                android:textSize="35sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_black_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Black" />
+                android:text="Black"
+                android:textSize="35sp" />
 
             <RadioButton
                 android:id="@+id/radioButton_white_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="White" />
+                android:text="White"
+                android:textSize="35sp" />
         </RadioGroup>
     </LinearLayout>
 
@@ -154,6 +164,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-Description:"
+        android:textSize="35sp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -163,6 +174,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:textSize="35sp"
         android:textColor="@color/Button_Blue" />
 
 </LinearLayout>

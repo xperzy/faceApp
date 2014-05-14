@@ -4,11 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,10 +17,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,7 +33,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -49,7 +46,7 @@ public class FaceRegister extends Activity {
 	private ImageView imageView;
 
 	private Uri fileUri;
-	private static final String SERVER_IP_ADDRESS = "http://157.182.38.24/php/";
+	private static final String SERVER_IP_ADDRESS = "http://192.168.43.222/php/";
 	private static final String uoploadUri = SERVER_IP_ADDRESS
 			+ "face_register.php";
 	private static final int IMAGE_SELECTOR = 1;
@@ -64,6 +61,9 @@ public class FaceRegister extends Activity {
 
 		// get Age
 		final NumberPicker numberPicker = (NumberPicker) findViewById(R.id.numberpicker);
+		
+		numberPicker.setBackgroundResource(R.color.White);
+		numberPicker.setAlpha((float) 0.8);
 		numberPicker.setMaxValue(200);
 		numberPicker.setMinValue(1);
 		numberPicker.setValue(25);
@@ -274,7 +274,7 @@ public class FaceRegister extends Activity {
 					bitmap = BitmapFactory.decodeStream(getContentResolver()
 							.openInputStream(fileUri));
 					Matrix matrix = new Matrix();
-					matrix.postRotate((float) 90.0);
+					matrix.postRotate((float) 0.0);
 					Bitmap rotaBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 							bitmap.getWidth(), bitmap.getHeight(), matrix,
 							false);
