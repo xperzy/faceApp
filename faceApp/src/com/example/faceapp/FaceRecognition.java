@@ -113,22 +113,16 @@ public class FaceRecognition extends Activity {
 	//2014/05 nexus7
 	//private static String SERVER_IP_ADDRESS = "http://192.168.43.222/php/";
 	//try set ip
-	SharedPreferences sp = getSharedPreferences("preferences",Context.MODE_PRIVATE);
-	private String SERVER_IP_ADDRESS = "http://"+sp.getString("serverIP","defName") +"/php/";
+	SharedPreferences sp;
+	private String SERVER_IP_ADDRESS = "";
 	
 	
-	private final String imageServerUri_load = SERVER_IP_ADDRESS
-			+ "load_list.php"; // "http://157.182.38.37/welcome.php";
-	private final String imageServerUri_getD = SERVER_IP_ADDRESS
-			+ "getDetected.php"; // "http://157.182.38.37/getDetected.php";
-	private final String imageServerUri_getCrop = SERVER_IP_ADDRESS
-			+ "getCrop.php";// "http://157.182.38.37/getCrop.php";
-	private final String imageServerUri_getMesh = SERVER_IP_ADDRESS
-			+ "getMesh.php";// "http://157.182.38.37/getMesh.php";
-	private final String imageServerUri_getPoints = SERVER_IP_ADDRESS
-			+ "getPoints.php";
-	private final String imageServerUri_getBMI = SERVER_IP_ADDRESS
-			+ "computeBMI.php";
+	private String imageServerUri_load;
+	private String imageServerUri_getD;
+	private String imageServerUri_getCrop;
+	private String imageServerUri_getMesh;
+	private String imageServerUri_getPoints;
+	private String imageServerUri_getBMI;
 
 	private ListView mLvPicasa;
 	private boolean mHasData = false;
@@ -153,6 +147,23 @@ public class FaceRecognition extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recog);
+		
+		sp = getSharedPreferences("preferences",Context.MODE_PRIVATE);
+		SERVER_IP_ADDRESS = "http://"+sp.getString("serverIP","defName") +"/php/";
+		
+		imageServerUri_load = SERVER_IP_ADDRESS
+				+ "load_list.php"; // "http://157.182.38.37/welcome.php";
+		imageServerUri_getD = SERVER_IP_ADDRESS
+				+ "getDetected.php"; // "http://157.182.38.37/getDetected.php";
+		imageServerUri_getCrop = SERVER_IP_ADDRESS
+				+ "getCrop.php";// "http://157.182.38.37/getCrop.php";
+		imageServerUri_getMesh = SERVER_IP_ADDRESS
+				+ "getMesh.php";// "http://157.182.38.37/getMesh.php";
+		imageServerUri_getPoints = SERVER_IP_ADDRESS
+				+ "getPoints.php";
+		imageServerUri_getBMI = SERVER_IP_ADDRESS
+				+ "computeBMI.php";
+
 
 		// SERVER_IP_ADDRESS =
 		// "http://"+((setIP)this.getApplication()).getServerIP()+"/php/";

@@ -13,13 +13,14 @@
         android:text="Type Server IP Address : "
         android:textAppearance="?android:attr/textAppearanceLarge" />
  
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/editTextDialogUserInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!-- android:inputType="number"
-        android:digits="0123456789." -->
+        android:layout_height="wrap_content"
+        
+    />
+        
        
-    </EditText>
+    
  
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.example.faceapp;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +15,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -81,8 +85,19 @@ public class MainActivity extends Activity {
 				View layout = inflater.inflate(R.layout.setip,
 						(ViewGroup) findViewById(R.id.layout_root));
 				inputDialog.setView(layout);
-				final EditText userInput = (EditText) layout.findViewById(R.id.editTextDialogUserInput);
-				  
+				final AutoCompleteTextView userInput = (AutoCompleteTextView) layout.findViewById(R.id.editTextDialogUserInput);
+				userInput.setDropDownBackgroundResource(R.color.Black);
+				
+				SharedPreferences sp = getSharedPreferences("preferences",Context.MODE_PRIVATE);		
+				String serverIP = sp.getString("serverIP", "Input Server IP...");
+				ArrayList<String> ips=new ArrayList<String>();
+				ips.add(serverIP);
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_dropdown_item_1line,ips);
+				
+				userInput.setAdapter(adapter);
+				
+								 
+				
 				inputDialog.setPositiveButton("OK",
 						new DialogInterface.OnClickListener() {
 
@@ -92,15 +107,23 @@ public class MainActivity extends Activity {
 								Editor editor = sp.edit();
 								editor.putString("serverIP", userInput.getText().toString());
 								if (editor.commit()){
-									Toast.makeText(getApplicationContext(), userInput.getText().toString()+"Set saved.", Toast.LENGTH_SHORT).show();
+									Toast.makeText(getApplicationContext(), userInput.getText().toString()+"  Set saved.", Toast.LENGTH_SHORT).show();
 								}else{
-									Toast.makeText(getApplicationContext(), userInput.getText().toString()+"Set Falied.", Toast.LENGTH_SHORT).show();
+									Toast.makeText(getApplicationContext(), userInput.getText().toString()+"  Set Falied.", Toast.LENGTH_SHORT).show();
 								}
 																
 								dialog.dismiss();
 							}
 
 						});
+				inputDialog.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				});
 				inputDialog.create();
 				inputDialog.show();
 				 
