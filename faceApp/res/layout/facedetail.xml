@@ -1,25 +1,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/blue_glow" >
 
+    <TextView
+                android:id="@+id/textView1"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Matched Identity Profiles: "
+                android:textColor="@color/YellowGreen"
+                android:textSize="40sp" />
+    
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp" >
 
+        
+        
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="120dp"
             android:orientation="vertical" >
 
+            
             <TextView
                 android:id="@+id/textView_name_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-Name:"
+                android:textColor="@color/White"
                 android:textSize="35sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -27,7 +42,8 @@
                 android:id="@+id/textView_name_val_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/Button_Blue" />
+                android:textColor="@color/YellowGreen"
+                android:textSize="35sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -40,6 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-Photo:"
+                android:textColor="@color/White"
                 android:textSize="35sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -66,6 +83,7 @@
             android:layout_marginRight="10dp"
             android:text="-Gender:"
             android:textSize="35sp"
+            android:textColor="@color/White"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <RadioGroup
@@ -80,6 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Male"
+                android:textColor="@color/White"
                 android:textSize="35sp" />
 
             <RadioButton
@@ -87,6 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Female"
+                android:textColor="@color/White"
                 android:textSize="35sp" />
         </RadioGroup>
     </LinearLayout>
@@ -104,14 +124,16 @@
             android:layout_height="wrap_content"
             android:text="-Age:"
             android:textSize="35sp"
+            android:textColor="@color/White"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textView_age_val_d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/Button_Blue"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textColor="@color/YellowGreen"
+            android:textSize="35sp"
+             />
     </LinearLayout>
 
     <LinearLayout
@@ -126,6 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-Ethnicity:"
+            android:textColor="@color/White"
             android:textSize="35sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -141,6 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Asian"
+                android:textColor="@color/White"
                 android:textSize="35sp" />
 
             <RadioButton
@@ -148,6 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Black"
+                android:textColor="@color/White"
                 android:textSize="35sp" />
 
             <RadioButton
@@ -155,6 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="White"
+                android:textColor="@color/White"
                 android:textSize="35sp" />
         </RadioGroup>
     </LinearLayout>
@@ -164,6 +190,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-Description:"
+        android:textColor="@color/White"
         android:textSize="35sp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
@@ -175,6 +202,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:textSize="35sp"
-        android:textColor="@color/Button_Blue" />
+        android:textColor="@color/YellowGreen" />
 
 </LinearLayout>

@@ -3,7 +3,9 @@ package com.example.faceapp;
 import com.android.volley.toolbox.ImageLoader;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -14,13 +16,18 @@ public class FaceDetail extends Activity {
 	ImageView imageView;
 	TextView textView_name;
 	TextView textView_age;
-	String imageServerUri_getDetail = "http://192.168.43.222/getDetail.php";
-	
+	String imageServerUri_getDetail;
+	SharedPreferences sp;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.facedetail);
+		
+		sp = getSharedPreferences("preferences",Context.MODE_PRIVATE);
+		String SERVER_IP_ADDRESS = "http://"+sp.getString("serverIP","defName") +"/php/";
+		imageServerUri_getDetail =  SERVER_IP_ADDRESS+"getDetail.php";
+		
 		
 		Intent intent = getIntent();
 		String face_title = intent.getStringExtra("face_title");
@@ -57,11 +64,13 @@ public class FaceDetail extends Activity {
 			rButton_male.setChecked(true);
 			rButton_female.setChecked(false);
 			rButton_female.setClickable(false);
+			rButton_male.setTextColor(getResources().getColor(R.color.GreenYellow));
 		}else{
 			if (gender=="Female"){
 				rButton_female.setChecked(true);
 				rButton_male.setChecked(false);
 				rButton_male.setClickable(false);
+				rButton_female.setTextColor(getResources().getColor(R.color.GreenYellow));
 			}
 		}
 		
@@ -72,6 +81,7 @@ public class FaceDetail extends Activity {
 			rButton_black.setClickable(false);
 			rButton_white.setChecked(false);
 			rButton_white.setClickable(false);
+			rButton_asian.setTextColor(getResources().getColor(R.color.GreenYellow));
 		}
 		
 		if (race=="White"){
@@ -80,6 +90,7 @@ public class FaceDetail extends Activity {
 			rButton_black.setClickable(false);
 			rButton_asian.setChecked(false);
 			rButton_asian.setClickable(false);
+			rButton_white.setTextColor(getResources().getColor(R.color.GreenYellow));
 		}
 		
 		if (race=="Black"){
@@ -88,6 +99,7 @@ public class FaceDetail extends Activity {
 			rButton_asian.setClickable(false);
 			rButton_white.setChecked(false);
 			rButton_white.setClickable(false);
+			rButton_black.setTextColor(getResources().getColor(R.color.GreenYellow));
 		}
 			
 

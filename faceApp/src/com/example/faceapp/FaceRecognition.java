@@ -163,7 +163,8 @@ public class FaceRecognition extends Activity {
 				+ "getPoints.php";
 		imageServerUri_getBMI = SERVER_IP_ADDRESS
 				+ "computeBMI.php";
-
+		upLoadServerUri = SERVER_IP_ADDRESS 
+				+ "upload_img_final.php";
 
 		// SERVER_IP_ADDRESS =
 		// "http://"+((setIP)this.getApplication()).getServerIP()+"/php/";
