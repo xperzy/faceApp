@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+     >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="25dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:text="Your BMI: \n(estimates)"
+                android:textSize="20sp"
+                android:textColor="@color/White"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_bmiVal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00.00"
+                android:textColor="@color/YellowGreen"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+             >
+      
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10sp"
+                    android:text="Category"
+                    android:textColor="@color/White"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:text="BMI Range"
+                    android:textColor="@color/White"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/Button_Blue" />
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/textView_ud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15sp"
+                    android:layout_marginRight="40dp"
+                    android:text="Underweight"
+                    android:textColor="@color/White"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView_udVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:text="@string/uw_val"
+                    android:textColor="@color/White"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/textView_nor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="15sp"
+                    android:text="Normal"
+                    android:textColor="@color/White"
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_norVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:text="@string/nor_val"
+                    android:textStyle="bold"
+                    android:textColor="@color/White"
+                    android:textSize="20sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/textView_over"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="15sp"
+                    android:text="Overweight"
+                    android:textColor="@color/White"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView_overVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:text="@string/over_val"
+                    android:textColor="@color/White"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/textView_obe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="15sp"
+                    android:text="Obese"
+                    android:textColor="@color/White"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView_obeVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:text="@string/obe_val"
+                    android:textColor="@color/White"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/Button_Blue" />
+        </TableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:layout_marginRight="20dp"
+            android:text="You looks:"
+            android:textColor="@color/White"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_bmiCat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N/A"
+            android:textColor="@color/YellowGreen"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

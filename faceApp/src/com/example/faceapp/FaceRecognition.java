@@ -319,6 +319,7 @@ public class FaceRecognition extends Activity {
 								case R.id.menu4:
 									// Toast.makeText(getApplicationContext(),
 									// "4", Toast.LENGTH_SHORT).show();
+																	
 									computeBMI();
 									break;
 								}
@@ -528,7 +529,8 @@ public class FaceRecognition extends Activity {
 
 	// Comput BMI: response to the button in popupmenu
 	private void computeBMI() {
-		Toast.makeText(getApplicationContext(), "Comput BMI",
+			
+		Toast.makeText(getApplicationContext(), "Computing BMI...",
 				Toast.LENGTH_SHORT).show();
 
 		String uri = imageServerUri_getBMI
@@ -545,8 +547,61 @@ public class FaceRecognition extends Activity {
 					public void onResponse(JSONObject response) {
 						// TODO Auto-generated method stub
 						try {
-							textView_bmi.setText(response.getString("bmi")
-									.toString());
+							
+							double bmi = Double.parseDouble(response.getString("bmi").toString());
+							textView_bmi.setText(Double.toString(bmi));
+														
+							LayoutInflater inflater = FaceRecognition.this.getLayoutInflater();
+							View v = inflater.inflate(R.layout.bmi_details, null);
+							TextView bmi_val = (TextView)v.findViewById(R.id.textView_bmiVal);
+							
+							//Select bmi category
+							//double bmi = 33.32;
+							bmi_val.setText(Double.toString(bmi));
+							TextView bmi_cat0;
+							TextView bmi_cat1;
+							TextView bmi_cat2 = (TextView)v.findViewById(R.id.textView_bmiCat);
+							if (bmi<18.5){
+								bmi_cat0 = (TextView)v.findViewById(R.id.textView_ud);
+								bmi_cat1 = (TextView)v.findViewById(R.id.textView_udVal);
+								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat2.setText("Underweight");
+							}
+							if (bmi>=18.5 && bmi<=24.9){
+								bmi_cat0 = (TextView)v.findViewById(R.id.textView_nor);
+								bmi_cat1 = (TextView)v.findViewById(R.id.textView_norVal);
+								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat2.setText("Normal");
+							}
+							if (bmi>=25.0 && bmi<=29.9){
+								bmi_cat0 = (TextView)v.findViewById(R.id.textView_over);
+								bmi_cat1 = (TextView)v.findViewById(R.id.textView_overVal);
+								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat2.setText("Overweight");
+							}
+							if (bmi>=30.0){
+								bmi_cat0 = (TextView)v.findViewById(R.id.textView_obe);
+								bmi_cat1 = (TextView)v.findViewById(R.id.textView_obeVal);
+								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
+								bmi_cat2.setText("Obese");
+							}
+							
+							
+							new AlertDialog.Builder(FaceRecognition.this,android.R.style.Theme_Holo_Dialog).setTitle("Body Mass Index").setView(v).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									
+								}
+							}).create().show();
+							
+							
+							
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

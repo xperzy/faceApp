@@ -4,5 +4,9 @@
     <string name="app_name">faceApp</string>
     <string name="action_settings">Settings</string>
     <string name="foot_note">Copyright @ 2014, Yu Zhu. All Rights Reserved </string>
+    <string name="uw_val">&lt;18.5</string>
+    <string name="nor_val">18.5 &#8211; 24.9</string>
+    <string name="over_val">25.0 &#8211; 29.9</string>
+    <string name="obe_val">&gt;30</string>
 
 </resources>
