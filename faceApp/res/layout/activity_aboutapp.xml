@@ -50,49 +50,25 @@
         android:layout_marginTop="22dp"
         android:src="@drawable/wvu2_tran" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:text="Facial Biometrics Demo"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/White"
-        android:textSize="35sp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/imageView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="22dp"
-        android:text="Version 0.8"
-        android:textColor="@color/White"
-        android:textSize="22sp" />
-
     <FrameLayout
         android:id="@+id/frameLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/textView1"
         android:layout_marginTop="28dp"
         android:layout_toRightOf="@+id/imageView2"
         android:orientation="vertical" >
 
         <ImageView
-            android:layout_width="420dp"
-            android:layout_height="420dp"
+            android:layout_width="400dp"
+            android:layout_height="480dp"
             android:alpha="0.2"
             android:background="@color/White" />
 
         <TextView
             android:id="@+id/aboutapptw"
-            android:layout_width="420dp"
-            android:layout_height="420dp"
+            android:layout_width="400dp"
+            android:layout_height="480dp"
             android:layout_marginTop="0dp"
             android:maxLines="30"
             android:scrollbars="vertical"
@@ -101,5 +77,17 @@
             android:textSize="20sp" />
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText1"
+        android:layout_marginTop="45dp"
+        android:layout_toRightOf="@+id/imageView2"
+        android:text="Facial Biometrics Demo"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/White"
+        android:textSize="35sp" />
 
 </RelativeLayout>

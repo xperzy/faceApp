@@ -194,10 +194,10 @@ public final class R {
     public static final class id {
         public static final int FrameView1=0x7f09000d;
         public static final int FrameView2=0x7f090010;
-        public static final int aboutapptw=0x7f090007;
+        public static final int aboutapptw=0x7f090006;
         public static final int action_settings=0x7f090057;
-        public static final int button1=0x7f090009;
-        public static final int button2=0x7f090008;
+        public static final int button1=0x7f090008;
+        public static final int button2=0x7f090007;
         public static final int button4=0x7f09000c;
         public static final int button5=0x7f09000a;
         public static final int button6=0x7f09000b;
@@ -208,7 +208,7 @@ public final class R {
         public static final int editText1=0x7f090002;
         public static final int editTextDialogUserInput=0x7f090056;
         public static final int editText_name=0x7f090020;
-        public static final int frameLayout1=0x7f090006;
+        public static final int frameLayout1=0x7f090004;
         public static final int fullimage=0x7f090040;
         public static final int group_popupmenu=0x7f090058;
         public static final int imageView1=0x7f090000;
@@ -243,9 +243,9 @@ public final class R {
         public static final int tableRow3=0x7f090034;
         public static final int tableRow4=0x7f090037;
         public static final int tableRow5=0x7f09003a;
-        public static final int textView1=0x7f090004;
+        public static final int textView1=0x7f090005;
         public static final int textView11=0x7f09003d;
-        public static final int textView2=0x7f090005;
+        public static final int textView2=0x7f090009;
         public static final int textView3=0x7f090001;
         public static final int textView4=0x7f090030;
         public static final int textView_Res=0x7f090013;
