@@ -8,5 +8,29 @@
     <string name="nor_val">18.5 &#8211; 24.9</string>
     <string name="over_val">25.0 &#8211; 29.9</string>
     <string name="obe_val">&gt;30</string>
-
+    <string name="aboutDemoFull"><![CDATA[
+        <h2>Facial Analysis for BMI estimation Demo</h2>
+        <h2>V0.8</h2>
+        <p><h3>About this Demo</h3></p>
+        <p>The Facial Analysis for BMI estimation Demo is for CVPR 2014 demonstration. It is developed by Yu Zhu, Lingyun Wen, and Guodong Guo, from Computer Vision Lab, Lane Department of CSEE, West Virgina University, USA. The main functionality of this demo is to estimate Body Mass Index (BMI) using face images on mobile devices. You can contact us by email <a href=\"guocseewvu@gmail.com\">VisionLab</a>.</p>
+        <h3>Running Environment</h3>
+        <p>Client Side: This demo has been tested on Google Nexus 7 Tablet, with Anrdoid system 4.4.2.</p>
+        <p>Server Side: Server side development has been tested on Linux (Ubuntu 13.04), with LAMP software bundle, Python 2.7 (with numpy), OpenCV 2.3, STASM and libSVM packages. </p>
+        <h3>How to Use this Demo</h3> 
+        <p>1. Set up server IP address if needed. The system automatically stores the previous IP address, so usually you do not need to change the server IP.</p> 
+        <p>2. Facial Analysis Interface. Press the \"Menu\" to show the button list.
+        
+        <p>  2.1. Take Photo. Take a face photo using the android camera or from the photo gallery. The system will show the image on the screen.</p>
+        <p>  2.2. Detect Face. Press \"Detect face\" button, the face image will firstly be uploaded to the server, and start to detect face on the server side. Face detection result will display on the screen.</p>
+        <p>  2.3. Compute BMI. Press \"Compute BMI\", system will get the BMI value from the server and display on the screen. </p>
+        <p>  2.4. Face Recognition.  (unfinished) </p>
+        <p>2.5. Gender,Race,and Age estimation.   (unfinished) </p>
+        
+        </p>
+        <br><br>
+        <h3>Contact </h3>
+        <p>Yu Zhu, Lingyun Wen, Guodong Guo</p>
+        <p>West Virginia University</p>
+        <p>2014.05</p>
+        <p>yzhu4@mix.wvu.edu </p>]]></string>
 </resources>

@@ -194,6 +194,7 @@ public final class R {
     public static final class id {
         public static final int FrameView1=0x7f09000d;
         public static final int FrameView2=0x7f090010;
+        public static final int aboutapptw=0x7f090007;
         public static final int action_settings=0x7f090057;
         public static final int button1=0x7f090009;
         public static final int button2=0x7f090008;
@@ -281,7 +282,6 @@ public final class R {
         public static final int textView_race_val=0x7f09001c;
         public static final int textView_ud=0x7f090032;
         public static final int textView_udVal=0x7f090033;
-        public static final int title_label=0x7f090007;
         public static final int tv_title=0x7f090055;
         public static final int txtHeader=0x7f090051;
         public static final int txtTitle=0x7f090053;
@@ -304,6 +304,7 @@ public final class R {
         public static final int popupmenu=0x7f080001;
     }
     public static final class string {
+        public static final int aboutDemoFull=0x7f060007;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int foot_note=0x7f060002;

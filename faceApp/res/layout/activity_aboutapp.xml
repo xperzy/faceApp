@@ -83,21 +83,22 @@
         android:layout_toRightOf="@+id/imageView2"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/title_label"
-            android:layout_width="360dp"
-            android:layout_height="420dp"
-            android:layout_marginTop="22dp"
-            android:scrollbars="vertical"
-            android:text="About this Demo.\n "
-            android:textColor="@color/YellowGreen"
-            android:textSize="20sp" />
-
         <ImageView
-            android:layout_width="360dp"
+            android:layout_width="420dp"
             android:layout_height="420dp"
             android:alpha="0.2"
             android:background="@color/White" />
+
+        <TextView
+            android:id="@+id/aboutapptw"
+            android:layout_width="420dp"
+            android:layout_height="420dp"
+            android:layout_marginTop="0dp"
+            android:maxLines="30"
+            android:scrollbars="vertical"
+            android:text="@+string/aboutDemoFull"
+            android:textColor="@color/YellowGreen"
+            android:textSize="20sp" />
 
     </FrameLayout>
 

@@ -169,6 +169,7 @@ int drawable wvu1_tran 0x7f020013
 int drawable wvu2_tran 0x7f020014
 int id FrameView1 0x7f09000d
 int id FrameView2 0x7f090010
+int id aboutapptw 0x7f090007
 int id action_settings 0x7f090057
 int id button1 0x7f090009
 int id button2 0x7f090008
@@ -256,7 +257,6 @@ int id textView_race_lab 0x7f09001b
 int id textView_race_val 0x7f09001c
 int id textView_ud 0x7f090032
 int id textView_udVal 0x7f090033
-int id title_label 0x7f090007
 int id tv_title 0x7f090055
 int id txtHeader 0x7f090051
 int id txtTitle 0x7f090053
@@ -273,6 +273,7 @@ int layout listview_item_row_volley 0x7f030009
 int layout setip 0x7f03000a
 int menu main 0x7f080000
 int menu popupmenu 0x7f080001
+int string aboutDemoFull 0x7f060007
 int string action_settings 0x7f060001
 int string app_name 0x7f060000
 int string foot_note 0x7f060002

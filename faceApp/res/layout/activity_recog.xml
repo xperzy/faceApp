@@ -136,7 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text=" 1.Take a photo \n 2.Upload and Detect face \n 3.Recognize ID, Age, Gender \n 4.Compute BMI"
+        android:text=" 1.Take a photo \n 2.Upload and Detect face \n 3.Recognize(unfinished) \n 4.Compute BMI"
         android:textColor="@color/White"
         android:textSize="25sp" />
 
