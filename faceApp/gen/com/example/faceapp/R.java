@@ -226,6 +226,7 @@ public final class R {
         public static final int menu2=0x7f09005a;
         public static final int menu3=0x7f09005b;
         public static final int menu4=0x7f09005c;
+        public static final int menu5=0x7f09005d;
         public static final int numberpicker=0x7f090027;
         public static final int progressBar=0x7f090012;
         public static final int radioButton_asian=0x7f090029;

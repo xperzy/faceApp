@@ -109,14 +109,13 @@ public class FaceRecognition extends Activity {
 	/********** Show Image List parameters *************/
 	private static final int RESULTS_PAGE_SIZE = 10;
 	// private static final String SERVER_IP_ADDRESS = "http://157.182.38.37/";
-	
-	//2014/05 nexus7
-	//private static String SERVER_IP_ADDRESS = "http://192.168.43.222/php/";
-	//try set ip
+
+	// 2014/05 nexus7
+	// private static String SERVER_IP_ADDRESS = "http://192.168.43.222/php/";
+	// try set ip
 	SharedPreferences sp;
 	private String SERVER_IP_ADDRESS = "";
-	
-	
+
 	private String imageServerUri_load;
 	private String imageServerUri_getD;
 	private String imageServerUri_getCrop;
@@ -147,24 +146,18 @@ public class FaceRecognition extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recog);
-		
-		sp = getSharedPreferences("preferences",Context.MODE_PRIVATE);
-		SERVER_IP_ADDRESS = "http://"+sp.getString("serverIP","defName") +"/php/";
-		
-		imageServerUri_load = SERVER_IP_ADDRESS
-				+ "load_list.php"; // "http://157.182.38.37/welcome.php";
-		imageServerUri_getD = SERVER_IP_ADDRESS
-				+ "getDetected.php"; // "http://157.182.38.37/getDetected.php";
-		imageServerUri_getCrop = SERVER_IP_ADDRESS
-				+ "getCrop.php";// "http://157.182.38.37/getCrop.php";
-		imageServerUri_getMesh = SERVER_IP_ADDRESS
-				+ "getMesh.php";// "http://157.182.38.37/getMesh.php";
-		imageServerUri_getPoints = SERVER_IP_ADDRESS
-				+ "getPoints.php";
-		imageServerUri_getBMI = SERVER_IP_ADDRESS
-				+ "computeBMI.php";
-		upLoadServerUri = SERVER_IP_ADDRESS 
-				+ "upload_img_final.php";
+
+		sp = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+		SERVER_IP_ADDRESS = "http://" + sp.getString("serverIP", "defName")
+				+ "/php/";
+
+		imageServerUri_load = SERVER_IP_ADDRESS + "load_list.php"; // "http://157.182.38.37/welcome.php";
+		imageServerUri_getD = SERVER_IP_ADDRESS + "getDetected.php"; // "http://157.182.38.37/getDetected.php";
+		imageServerUri_getCrop = SERVER_IP_ADDRESS + "getCrop.php";// "http://157.182.38.37/getCrop.php";
+		imageServerUri_getMesh = SERVER_IP_ADDRESS + "getMesh.php";// "http://157.182.38.37/getMesh.php";
+		imageServerUri_getPoints = SERVER_IP_ADDRESS + "getPoints.php";
+		imageServerUri_getBMI = SERVER_IP_ADDRESS + "computeBMI.php";
+		upLoadServerUri = SERVER_IP_ADDRESS + "upload_img_final.php";
 
 		// SERVER_IP_ADDRESS =
 		// "http://"+((setIP)this.getApplication()).getServerIP()+"/php/";
@@ -175,7 +168,7 @@ public class FaceRecognition extends Activity {
 		// upLoadServerUri = "http://157.182.38.24/php/upload_img.php";
 
 		// 3.20 test
-		//upLoadServerUri = "http://192.168.43.222/php/upload_img_try.php";
+		// upLoadServerUri = "http://192.168.43.222/php/upload_img_try.php";
 
 		// imageServerUri = "http://157.182.38.37/uploads/4.jpg";
 
@@ -319,9 +312,13 @@ public class FaceRecognition extends Activity {
 								case R.id.menu4:
 									// Toast.makeText(getApplicationContext(),
 									// "4", Toast.LENGTH_SHORT).show();
-																	
+
 									computeBMI();
 									break;
+								case R.id.menu5:
+									detectFace();
+									computeBMI();
+
 								}
 
 								return true;
@@ -497,6 +494,8 @@ public class FaceRecognition extends Activity {
 		imageView3.setImageResource(R.drawable.face_a);
 		imageView2.setImageResource(R.drawable.facial_b);
 
+		textView_bmi.setText("00.0");
+
 		Intent galleryintent = new Intent(Intent.ACTION_GET_CONTENT, null);
 		galleryintent.setType("image/*");
 
@@ -529,93 +528,153 @@ public class FaceRecognition extends Activity {
 
 	// Comput BMI: response to the button in popupmenu
 	private void computeBMI() {
-			
-		Toast.makeText(getApplicationContext(), "Computing BMI...",
-				Toast.LENGTH_SHORT).show();
 
-		String uri = imageServerUri_getBMI
-				+ "?name="
-				+ fileUri.toString().substring(
-						fileUri.toString().indexOf("IMG"));
-		Log.i("bmi uri:", uri);
-		// Get BMI result
-		RequestQueue queue = MyVolley.getRequestQueue();
+		if (bitmap == null) {
+			Context context = getApplicationContext();
+			CharSequence text = "Please Detect Face!";
+			int duration = Toast.LENGTH_SHORT;
 
-		JsonObjectRequest myReq = new JsonObjectRequest(Method.GET, uri, null,
-				new Response.Listener<JSONObject>() {
-					@Override
-					public void onResponse(JSONObject response) {
-						// TODO Auto-generated method stub
-						try {
-							
-							double bmi = Double.parseDouble(response.getString("bmi").toString());
-							textView_bmi.setText(Double.toString(bmi));
-														
-							LayoutInflater inflater = FaceRecognition.this.getLayoutInflater();
-							View v = inflater.inflate(R.layout.bmi_details, null);
-							TextView bmi_val = (TextView)v.findViewById(R.id.textView_bmiVal);
-							
-							//Select bmi category
-							//double bmi = 33.32;
-							bmi_val.setText(Double.toString(bmi));
-							TextView bmi_cat0;
-							TextView bmi_cat1;
-							TextView bmi_cat2 = (TextView)v.findViewById(R.id.textView_bmiCat);
-							if (bmi<18.5){
-								bmi_cat0 = (TextView)v.findViewById(R.id.textView_ud);
-								bmi_cat1 = (TextView)v.findViewById(R.id.textView_udVal);
-								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat2.setText("Underweight");
-							}
-							if (bmi>=18.5 && bmi<=24.9){
-								bmi_cat0 = (TextView)v.findViewById(R.id.textView_nor);
-								bmi_cat1 = (TextView)v.findViewById(R.id.textView_norVal);
-								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat2.setText("Normal");
-							}
-							if (bmi>=25.0 && bmi<=29.9){
-								bmi_cat0 = (TextView)v.findViewById(R.id.textView_over);
-								bmi_cat1 = (TextView)v.findViewById(R.id.textView_overVal);
-								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat2.setText("Overweight");
-							}
-							if (bmi>=30.0){
-								bmi_cat0 = (TextView)v.findViewById(R.id.textView_obe);
-								bmi_cat1 = (TextView)v.findViewById(R.id.textView_obeVal);
-								bmi_cat0.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat1.setTextColor(getResources().getColor(R.color.YellowGreen));
-								bmi_cat2.setText("Obese");
-							}
-							
-							
-							new AlertDialog.Builder(FaceRecognition.this,android.R.style.Theme_Holo_Dialog).setTitle("Body Mass Index").setView(v).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// TODO Auto-generated method stub
-									
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+
+		} else {
+
+			Toast.makeText(getApplicationContext(), "Computing BMI...",
+					Toast.LENGTH_SHORT).show();
+
+			String uri = imageServerUri_getBMI
+					+ "?name="
+					+ fileUri.toString().substring(
+							fileUri.toString().indexOf("IMG"));
+			Log.i("bmi uri:", uri);
+			// Get BMI result
+			RequestQueue queue = MyVolley.getRequestQueue();
+
+			JsonObjectRequest myReq = new JsonObjectRequest(Method.GET, uri,
+					null, new Response.Listener<JSONObject>() {
+						@Override
+						public void onResponse(JSONObject response) {
+							// TODO Auto-generated method stub
+							try {
+
+								double bmi = Double.parseDouble(response
+										.getString("bmi").toString());
+								// textView_bmi.setText(String.format("%0.1f",
+								// bmi));
+								textView_bmi.setText(Double.toString(bmi)
+										.substring(0, 4));
+
+								LayoutInflater inflater = FaceRecognition.this
+										.getLayoutInflater();
+								View v = inflater.inflate(R.layout.bmi_details,
+										null);
+								TextView bmi_val = (TextView) v
+										.findViewById(R.id.textView_bmiVal);
+
+								// Select bmi category
+								// double bmi = 33.32;
+								bmi_val.setText(Double.toString(bmi).substring(
+										0, 4));
+
+								// bmi_val.setText(String.format("%0.1f", bmi));
+								TextView bmi_cat0;
+								TextView bmi_cat1;
+								TextView bmi_cat2 = (TextView) v
+										.findViewById(R.id.textView_bmiCat);
+								if (bmi < 18.5) {
+									bmi_cat0 = (TextView) v
+											.findViewById(R.id.textView_ud);
+									bmi_cat1 = (TextView) v
+											.findViewById(R.id.textView_udVal);
+									bmi_cat0.setTextColor(getResources()
+											.getColor(R.color.Button_Blue));
+									bmi_cat1.setTextColor(getResources()
+											.getColor(R.color.Button_Blue));
+									bmi_cat2.setText("Underweight");
+									bmi_cat2.setTextColor(getResources()
+											.getColor(R.color.Button_Blue));
+									bmi_val.setTextColor(getResources()
+											.getColor(R.color.Button_Blue));
 								}
-							}).create().show();
-							
-							
-							
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+								if (bmi >= 18.5 && bmi <= 24.9) {
+									bmi_cat0 = (TextView) v
+											.findViewById(R.id.textView_nor);
+									bmi_cat1 = (TextView) v
+											.findViewById(R.id.textView_norVal);
+									bmi_cat0.setTextColor(getResources()
+											.getColor(R.color.YellowGreen));
+									bmi_cat1.setTextColor(getResources()
+											.getColor(R.color.YellowGreen));
+									bmi_cat2.setText("Normal");
+									bmi_cat2.setTextColor(getResources()
+											.getColor(R.color.YellowGreen));
+									bmi_val.setTextColor(getResources()
+											.getColor(R.color.YellowGreen));
+								}
+								if (bmi >= 25.0 && bmi <= 29.9) {
+									bmi_cat0 = (TextView) v
+											.findViewById(R.id.textView_over);
+									bmi_cat1 = (TextView) v
+											.findViewById(R.id.textView_overVal);
+									bmi_cat0.setTextColor(getResources()
+											.getColor(R.color.Red));
+									bmi_cat1.setTextColor(getResources()
+											.getColor(R.color.Red));
+									bmi_cat2.setText("Overweight");
+									bmi_cat2.setTextColor(getResources()
+											.getColor(R.color.Red));
+									bmi_val.setTextColor(getResources()
+											.getColor(R.color.Red));
+								}
+								if (bmi >= 30.0) {
+									bmi_cat0 = (TextView) v
+											.findViewById(R.id.textView_obe);
+									bmi_cat1 = (TextView) v
+											.findViewById(R.id.textView_obeVal);
+									bmi_cat0.setTextColor(getResources()
+											.getColor(R.color.Red));
+									bmi_cat1.setTextColor(getResources()
+											.getColor(R.color.Red));
+									bmi_cat2.setText("Obese");
+									bmi_cat2.setTextColor(getResources()
+											.getColor(R.color.Red));
+									bmi_val.setTextColor(getResources()
+											.getColor(R.color.Red));
+								}
+
+								new AlertDialog.Builder(FaceRecognition.this,
+										android.R.style.Theme_Holo_Dialog)
+										.setTitle("Body Mass Index")
+										.setView(v)
+										.setPositiveButton(
+												android.R.string.ok,
+												new DialogInterface.OnClickListener() {
+
+													@Override
+													public void onClick(
+															DialogInterface dialog,
+															int which) {
+														// TODO Auto-generated
+														// method stub
+
+													}
+												}).create().show();
+
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
-					}
-				}, new Response.ErrorListener() {
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						// TODO Auto-generated method stub
-						Log.i("bmierror", error.toString());
-						textView_bmi.setText("N/A");
-					}
-				});
-		queue.add(myReq);
+					}, new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							// TODO Auto-generated method stub
+							Log.i("bmierror", error.toString());
+							textView_bmi.setText("N/A");
+						}
+					});
+			queue.add(myReq);
+		}
 	}
 
 	class UploadImageTask extends AsyncTask<Integer, Integer, Bitmap> {
@@ -632,28 +691,35 @@ public class FaceRecognition extends Activity {
 			int y = 0;
 			int w = 0;
 			int h = 0;
-			
-			
-			
-				try {
-					JSONArray rect_arr = (JSONArray) detectJSONObj
-							.get("rectangle");
-					
-					JSONObject rect = rect_arr.getJSONObject(0);
-					if (rect_arr.isNull(0)){
-						//Toast.makeText(getApplicationContext(), "No Face Detected!!! Please Select Another Image.", Toast.LENGTH_LONG).show();
-	new AlertDialog.Builder(FaceRecognition.this).setTitle("No Face Detected").setMessage("No Face Detected!!! Please Select Another Image.").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-								
-							}
-						}).setIcon(android.R.drawable.ic_dialog_alert).create().show();
-						
-					}else{
-						
-					
+
+			try {
+				JSONArray rect_arr = (JSONArray) detectJSONObj.get("rectangle");
+
+				JSONObject rect = rect_arr.getJSONObject(0);
+				if (rect_arr.isNull(0)) {
+					// Toast.makeText(getApplicationContext(),
+					// "No Face Detected!!! Please Select Another Image.",
+					// Toast.LENGTH_LONG).show();
+					new AlertDialog.Builder(FaceRecognition.this)
+							.setTitle("No Face Detected")
+							.setMessage(
+									"No Face Detected!!! Please Select Another Image.")
+							.setPositiveButton(android.R.string.ok,
+									new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO Auto-generated method stub
+
+										}
+									})
+							.setIcon(android.R.drawable.ic_dialog_alert)
+							.create().show();
+
+				} else {
+
 					x = rect.getInt("x");
 					y = rect.getInt("y");
 					w = rect.getInt("w");
@@ -664,31 +730,40 @@ public class FaceRecognition extends Activity {
 									imageView3.getWidth(),
 									imageView3.getHeight(), true);
 					imageView3.setImageBitmap(sizeBitmap);
-					}
-				} catch (JSONException e) {
-					Log.e(TAG, "json draw rectangle error.");
 				}
+			} catch (JSONException e) {
+				Log.e(TAG, "json draw rectangle error.");
+			}
 
-				// Draw Points and display on main image view
-				try {
-					JSONArray rect_arr = (JSONArray) detectJSONObj
-							.get("points");
-					
-					if (rect_arr.isNull(0)){
-						//Toast.makeText(getApplicationContext(), "No Face Detected!!! Please Select Another Image.", Toast.LENGTH_LONG).show();
-						
-						new AlertDialog.Builder(FaceRecognition.this).setTitle("No Face Detected").setMessage("No Face Detected!!! Please Select Another Image.").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-								
-							}
-						}).setIcon(android.R.drawable.ic_dialog_alert).create().show();
-						
-					}else{
-					
-					
+			// Draw Points and display on main image view
+			try {
+				JSONArray rect_arr = (JSONArray) detectJSONObj.get("points");
+
+				if (rect_arr.isNull(0)) {
+					// Toast.makeText(getApplicationContext(),
+					// "No Face Detected!!! Please Select Another Image.",
+					// Toast.LENGTH_LONG).show();
+
+					new AlertDialog.Builder(FaceRecognition.this)
+							.setTitle("No Face Detected")
+							.setMessage(
+									"No Face Detected!!! Please Select Another Image.")
+							.setPositiveButton(android.R.string.ok,
+									new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO Auto-generated method stub
+
+										}
+									})
+							.setIcon(android.R.drawable.ic_dialog_alert)
+							.create().show();
+
+				} else {
+
 					Bitmap pointBitmap = bitmap.copy(Bitmap.Config.ARGB_8888,
 							true);
 					Canvas canvas = new Canvas(pointBitmap);
@@ -720,11 +795,11 @@ public class FaceRecognition extends Activity {
 									imageView2.getWidth(),
 									imageView2.getHeight(), true);
 					imageView2.setImageBitmap(sizeBitmap);
-					}
-				} catch (JSONException e) {
-					Log.e(TAG, "json draw points error.");
 				}
-			
+			} catch (JSONException e) {
+				Log.e(TAG, "json draw points error.");
+			}
+
 		}
 
 		@Override

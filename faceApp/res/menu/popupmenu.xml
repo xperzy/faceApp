@@ -9,5 +9,7 @@
 	        android:title="Recognize Face"/>
 	    <item android:id="@+id/menu4" 
 	        android:title="Compute BMI"/>
+	    <item android:id="@+id/menu5" 
+	        android:title="Demo BMI"/>
 	</group>
 </menu>
