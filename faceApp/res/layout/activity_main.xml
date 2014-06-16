@@ -22,7 +22,6 @@
         android:background="@color/Button_Blue"
         android:textSize="20sp"
         android:textColor="@color/colorlist" />
-
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
@@ -78,48 +77,6 @@
         android:layout_marginTop="22dp"
         android:src="@drawable/wvu2_tran" />
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button2"
-        android:layout_below="@+id/button2"
-        android:layout_marginTop="10dp"
-        android:layout_toLeftOf="@+id/imageView1"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:text="    Set Server IP Address"
-        android:textColor="@color/colorlist"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button5"
-        android:layout_alignRight="@+id/button5"
-        android:layout_below="@+id/button5"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:layout_marginTop="10dp"
-        android:text="    About this demo"
-        android:textColor="@color/colorlist"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button6"
-        android:layout_alignRight="@+id/button6"
-        android:layout_below="@+id/button6"
-        android:background="@color/Button_Blue"
-        android:gravity="left|center_vertical"
-        android:layout_marginTop="10dp"
-        android:text="    Exit"
-        android:textColor="@color/colorlist"
-        android:textSize="20sp" />
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
@@ -139,8 +96,63 @@
         android:layout_alignLeft="@+id/button1"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="28dp"
-        android:text="Version 0.8"
+        android:text="Version 1.01"
         android:textColor="@color/White"
         android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:layout_toLeftOf="@+id/imageView1"
+        android:background="@color/Button_Blue"
+        android:layout_marginTop="10dp"
+        android:gravity="left|center_vertical"
+        android:text="    BMI Calculator"
+        android:textColor="@color/colorlist"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button7"
+        android:layout_below="@+id/button7"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/imageView1"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="    Set Server IP Address"
+        android:textColor="@color/colorlist"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button5"
+        android:layout_below="@+id/button5"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/imageView1"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="    About this demo"
+        android:textColor="@color/colorlist"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView1"
+        android:layout_alignLeft="@+id/button6"
+        android:layout_toLeftOf="@+id/imageView1"
+        android:background="@color/Button_Blue"
+        android:gravity="left|center_vertical"
+        android:text="    Exit"
+        android:textColor="@color/colorlist"
+        android:textSize="20sp" />
 
 </RelativeLayout>

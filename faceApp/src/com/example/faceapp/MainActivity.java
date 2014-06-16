@@ -62,6 +62,19 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+		
+		
+		// BMI Calculator Button
+		Button btnBMI = (Button) findViewById(R.id.button7);
+		btnBMI.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this,
+						BMICal.class);
+				startActivity(intent);
+			}
+		});
+		
 
 		// Exit Button
 		Button btnExit = (Button) findViewById(R.id.button4);

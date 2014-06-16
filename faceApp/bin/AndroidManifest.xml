@@ -39,6 +39,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+          <activity
+            android:name="com.example.faceapp.BMICal"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
         <activity
             android:name="com.example.faceapp.FaceRecognition"
             android:label="@string/app_name"

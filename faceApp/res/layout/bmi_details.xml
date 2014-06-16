@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="5dp"
-                android:text="Your BMI: \n(estimates)"
+                android:text="Your BMI: "
                 android:textSize="20sp"
                 android:textColor="@color/White"
                 android:textStyle="bold" />
@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:layout_marginRight="20dp"
-            android:text="You looks:"
+            android:text="You look:"
             android:textColor="@color/White"
             android:textSize="30sp"
             android:textStyle="bold" />

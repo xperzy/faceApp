@@ -20,7 +20,6 @@
     <uses-permission android:name="android.permission.READ_OWNER_DATA" />
 
     <application
-        android:name="setIP"
         android:allowBackup="true"
         android:icon="@drawable/lab"
         android:label="@string/app_name"
@@ -37,6 +36,11 @@
         </activity>
         <activity
             android:name="com.example.faceapp.AboutApp"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+          <activity
+            android:name="com.example.faceapp.BMICal"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
